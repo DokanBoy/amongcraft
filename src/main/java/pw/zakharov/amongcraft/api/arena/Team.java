@@ -20,6 +20,7 @@ public interface Team {
     default void join(@NotNull Player player) {
         if (getMaxSize() > getSize() || player.hasPermission("among.admin")) {
             getPlayers().add(player);
+            player.teleport(getSpawn());
         }
     }
 

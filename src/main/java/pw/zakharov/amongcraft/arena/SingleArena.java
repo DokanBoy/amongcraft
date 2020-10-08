@@ -22,6 +22,7 @@ import pw.zakharov.amongcraft.team.ImposterTeam;
 import pw.zakharov.amongcraft.team.InnocentTeam;
 import pw.zakharov.amongcraft.team.SpectatorTeam;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -63,10 +64,10 @@ public class SingleArena implements Arena {
 
     @Override
     public void enable() {
-        setStatus(State.ENABLED);
-
         world = Helper.server().getWorld(worldName);
         setupWorld();
+
+        setStatus(State.ENABLED);
     }
 
     @Override
@@ -140,6 +141,14 @@ public class SingleArena implements Arena {
     }
 
     public void join(@NotNull Player player, @NotNull Team team) {
+        Optional<Team> currentTeam = getContext().getTeams()
+                .stream()
+                .filter(t -> t.getPlayers().contains(player))
+                .findFirst();
+        if (currentTeam.isPresent()) {
+            Log.info("Player already in " + currentTeam.get().getData().getName());
+            return;
+        }
         team.join(player);
         Log.info("Player " + player.getName() + " joined to " + team.getData().getName());
     }
