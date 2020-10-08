@@ -5,7 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
@@ -26,7 +26,7 @@ public interface Team {
 
     @NotNull Location getSpawn();
 
-    @NotNull List<Player> getPlayers();
+    @NotNull Set<Player> getPlayers();
 
     @NotNull TeamData getData();
 

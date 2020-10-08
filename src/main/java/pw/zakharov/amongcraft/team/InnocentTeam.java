@@ -5,10 +5,9 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import pw.zakharov.amongcraft.api.arena.Team;
-import pw.zakharov.amongcraft.api.member.Member;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
@@ -21,12 +20,12 @@ public class InnocentTeam implements Team {
     private final int maxSize;
     private final TeamData data;
     private final Location spawn;
-    private final List<Player> players;
+    private final Set<Player> players;
 
     public InnocentTeam(Location spawn, int maxSize) {
         this.maxSize = maxSize;
         this.spawn = spawn;
-        this.players = new LinkedList<>();
+        this.players = new LinkedHashSet<>();
         this.data = new InnocentTeamData("Мирный");
     }
 
@@ -46,7 +45,7 @@ public class InnocentTeam implements Team {
     }
 
     @Override
-    public @NotNull List<Player> getPlayers() {
+    public @NotNull Set<Player> getPlayers() {
         return players;
     }
 
