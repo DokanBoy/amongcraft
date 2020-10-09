@@ -9,11 +9,17 @@ import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import pw.zakharov.amongcraft.api.arena.Arena;
 import pw.zakharov.amongcraft.arena.SingleArena;
+import pw.zakharov.amongcraft.service.*;
+
+import static pw.zakharov.amongcraft.api.arena.Arena.StopCause.UNKNOWN;
 
 public final class AmongCraft extends ExtendedJavaPlugin {
 
-    private Arena singleArena;
     private World amongWorld;
+
+    private static TeamService teamService;
+    private static ArenaService arenaService;
+    private static ScoreboardService scoreboardService;
 
     @Override
     protected void enable() {
@@ -22,36 +28,50 @@ public final class AmongCraft extends ExtendedJavaPlugin {
         wc.generateStructures(false);
         amongWorld = Helper.server().createWorld(wc);
 
-        singleArena = new SingleArena(
-                "Shuttle",
-                wc.name(),
-                new Location(amongWorld, 0, 4, 0),
-                2);
+        teamService = new TeamServiceImpl(this);
+        arenaService = new ArenaServiceImpl(this);
+        scoreboardService = new ScoreboardServiceImpl(this);
+
+        arenaService.register(new SingleArena("Shuttle", amongWorld, new Location(amongWorld, 0, 4, 0), 2));
+
+        Arena shuttleArena = arenaService.getArena("Shuttle").orElseThrow(NullPointerException::new);
 
         Commands.create()
                 .assertPlayer()
                 .handler(context -> {
-                    singleArena.enable();
-                    singleArena.start(5);
-                    singleArena.randomJoin(context.sender());
-                    context.reply("Arena state: " + singleArena.getState().name());
+                    shuttleArena.start(5);
+                    shuttleArena.randomJoin(context.sender());
+                    context.reply("Arena state: " + shuttleArena.getState().name());
                 })
                 .register("start");
 
         Commands.create()
                 .assertPlayer()
                 .handler(context -> {
-
-                    singleArena.stop(Arena.StopCause.UNKNOWN, 5);
-                    singleArena.disable();
+                    shuttleArena.stop(UNKNOWN, 5);
+                    shuttleArena.disable();
                 })
                 .register("stop");
     }
 
     @Override
     protected void disable() {
-        singleArena.stop(Arena.StopCause.UNKNOWN);
-        singleArena.disable();
+        arenaService.getArenas().forEach(arena -> {
+            arena.stop(UNKNOWN);
+            arena.disable();
+        });
+    }
+
+    public static TeamService getTeamService() {
+        return teamService;
+    }
+
+    public static ArenaService getArenaService() {
+        return arenaService;
+    }
+
+    public static ScoreboardService getScoreboardService() {
+        return scoreboardService;
     }
 
 }

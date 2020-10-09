@@ -43,7 +43,7 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public @NotNull Set<Team> getTeams(@NotNull String name) {
+    public @NotNull Set<Team> getTeams() {
         return teams;
     }
 

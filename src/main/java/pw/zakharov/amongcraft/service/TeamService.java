@@ -18,6 +18,6 @@ public interface TeamService {
 
     Optional<Team> getTeam(@NotNull String name);
 
-    @NotNull Set<Team> getTeams(@NotNull String name);
+    @NotNull Set<Team> getTeams();
 
 }

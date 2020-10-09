@@ -1,6 +1,5 @@
 package pw.zakharov.amongcraft.arena;
 
-import com.google.common.collect.ImmutableSet;
 import me.lucko.helper.Events;
 import me.lucko.helper.Helper;
 import me.lucko.helper.Schedulers;
@@ -13,11 +12,13 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import pw.zakharov.amongcraft.AmongCraft;
 import pw.zakharov.amongcraft.api.arena.Arena;
 import pw.zakharov.amongcraft.api.arena.ArenaContext;
 import pw.zakharov.amongcraft.api.arena.Team;
 import pw.zakharov.amongcraft.api.event.arena.ArenaStartEvent;
 import pw.zakharov.amongcraft.api.event.arena.ArenaStopEvent;
+import pw.zakharov.amongcraft.service.TeamService;
 import pw.zakharov.amongcraft.team.ImposterTeam;
 import pw.zakharov.amongcraft.team.InnocentTeam;
 import pw.zakharov.amongcraft.team.SpectatorTeam;
@@ -29,6 +30,7 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static pw.zakharov.amongcraft.api.arena.Arena.State.*;
+import static pw.zakharov.amongcraft.api.arena.Arena.StopCause.UNKNOWN;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
@@ -36,19 +38,18 @@ import static pw.zakharov.amongcraft.api.arena.Arena.State.*;
  */
 public class SingleArena implements Arena {
 
-    private World world;
-    private State state;
+    private @NotNull State state;
 
-    private final String arenaName;
-    private final String worldName;
-    private final ArenaContext context;
+    private final @NotNull String arenaName;
+    private final @NotNull World world;
+    private final @NotNull ArenaContext context;
 
     public SingleArena(@NotNull String arenaName,
-                       @NotNull String worldName,
+                       @NotNull World world,
                        @NotNull Location lobbyLocation,
                        int teams) {
         this.arenaName = arenaName;
-        this.worldName = worldName;
+        this.world = world;
         this.state = DISABLED;
 
         Log.info("Created arena: " + toString());
@@ -74,8 +75,6 @@ public class SingleArena implements Arena {
     @Override
     public void enable() {
         if (state == ENABLED) return;
-
-        world = Helper.server().getWorld(worldName);
         setupWorld();
 
         setStatus(ENABLED);
@@ -84,7 +83,7 @@ public class SingleArena implements Arena {
     @Override
     public void disable() {
         if (state == DISABLED) return;
-        if (state == STARTED) stop(Arena.StopCause.UNKNOWN);
+        if (state == STARTED) stop(UNKNOWN);
 
         Players.all().forEach(player -> player.kickPlayer("Arena disabled"));
         Helper.server().unloadWorld(world, false);
@@ -205,16 +204,17 @@ public class SingleArena implements Arena {
 
     public static class SingleArenaContext implements ArenaContext {
 
-        private final Location lobbyLocation;
-        private final Set<Team> teams;
+        private final @NotNull Location lobbyLocation;
+        private final @NotNull Set<Team> teams;
         private final int maxTeams;
 
         public SingleArenaContext(@NotNull Location lobbyLocation, int maxTeams) {
-            this.teams = ImmutableSet.of(
-                    new ImposterTeam(lobbyLocation.add(10, 0, 10), 2),
-                    new InnocentTeam(lobbyLocation.add(15, 0, 15), 12),
-                    new SpectatorTeam(lobbyLocation.add(20, 0, 20))
-            );
+            final TeamService teamService = AmongCraft.getTeamService();
+            teamService.register(new ImposterTeam(lobbyLocation.add(10, 0, 10), 2));
+            teamService.register(new InnocentTeam(lobbyLocation.add(15, 0, 15), 12));
+            teamService.register(new SpectatorTeam(lobbyLocation.add(20, 0, 20)));
+
+            this.teams = teamService.getTeams();
             this.maxTeams = maxTeams;
             this.lobbyLocation = lobbyLocation;
 
