@@ -43,7 +43,7 @@ public final class AmongCraft extends ExtendedJavaPlugin {
                     shuttleArena.randomJoin(context.sender());
                     context.reply("Arena state: " + shuttleArena.getState().name());
                 })
-                .register("start");
+                .register("astart");
 
         Commands.create()
                 .assertPlayer()
@@ -51,7 +51,7 @@ public final class AmongCraft extends ExtendedJavaPlugin {
                     shuttleArena.stop(UNKNOWN, 5);
                     shuttleArena.disable();
                 })
-                .register("stop");
+                .register("astop");
     }
 
     @Override
