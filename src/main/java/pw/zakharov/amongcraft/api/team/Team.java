@@ -1,4 +1,4 @@
-package pw.zakharov.amongcraft.api.arena;
+package pw.zakharov.amongcraft.api.team;
 
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -27,11 +27,11 @@ public interface Team {
 
     @NotNull Set<Player> getPlayers();
 
-    @NotNull TeamData getData();
+    @NotNull TeamContext getData();
 
     @NotNull Role getRole();
 
-    interface TeamData {
+    interface TeamContext {
 
         @NotNull String getName();
 

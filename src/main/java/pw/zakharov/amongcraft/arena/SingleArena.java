@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import pw.zakharov.amongcraft.AmongCraft;
 import pw.zakharov.amongcraft.api.arena.Arena;
 import pw.zakharov.amongcraft.api.arena.ArenaContext;
-import pw.zakharov.amongcraft.api.arena.Team;
+import pw.zakharov.amongcraft.api.team.Team;
 import pw.zakharov.amongcraft.api.event.arena.ArenaStartEvent;
 import pw.zakharov.amongcraft.api.event.arena.ArenaStopEvent;
 import pw.zakharov.amongcraft.service.TeamService;

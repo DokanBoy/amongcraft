@@ -2,7 +2,7 @@ package pw.zakharov.amongcraft.api.arena;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import pw.zakharov.amongcraft.service.ArenaService;
+import pw.zakharov.amongcraft.api.team.Team;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
@@ -24,13 +24,13 @@ public interface Arena {
 
     void stop(StopCause cause, int afterSec);
 
-    @NotNull ArenaContext getContext();
-
-    @NotNull State getState();
-
     void randomJoin(@NotNull Player player);
 
     void join(@NotNull Player player, @NotNull Team team);
+
+    @NotNull ArenaContext getContext();
+
+    @NotNull State getState();
 
     enum State {
         ENABLED,

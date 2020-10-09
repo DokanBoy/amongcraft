@@ -4,7 +4,7 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import pw.zakharov.amongcraft.api.arena.Team;
+import pw.zakharov.amongcraft.api.team.Team;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -18,7 +18,7 @@ public class InnocentTeam implements Team {
     private static final Role INNOCENT_ROLE = Role.INNOCENT;
 
     private final int maxSize;
-    private final TeamData data;
+    private final TeamContext data;
     private final Location spawn;
     private final Set<Player> players;
 
@@ -26,7 +26,7 @@ public class InnocentTeam implements Team {
         this.maxSize = maxSize;
         this.spawn = spawn;
         this.players = new LinkedHashSet<>();
-        this.data = new InnocentTeamData("Мирный");
+        this.data = new InnocentTeamContext("Мирный");
     }
 
     @Override
@@ -50,7 +50,7 @@ public class InnocentTeam implements Team {
     }
 
     @Override
-    public @NotNull TeamData getData() {
+    public @NotNull Team.TeamContext getData() {
         return data;
     }
 
@@ -59,12 +59,12 @@ public class InnocentTeam implements Team {
         return INNOCENT_ROLE;
     }
 
-    private static class InnocentTeamData implements TeamData {
+    private static class InnocentTeamContext implements TeamContext {
 
         private final String name;
         private final Color color = Color.GREEN;
 
-        public InnocentTeamData(String name) {
+        public InnocentTeamContext(String name) {
             this.name = name;
         }
 

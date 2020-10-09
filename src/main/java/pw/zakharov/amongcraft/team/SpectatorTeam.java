@@ -4,7 +4,7 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import pw.zakharov.amongcraft.api.arena.Team;
+import pw.zakharov.amongcraft.api.team.Team;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -18,14 +18,14 @@ public class SpectatorTeam implements Team {
     private static final Role SPECTATOR_ROLE = Role.SPECTATOR;
     private static final int MAX_TEAM_SIZE = 999;
 
-    private final TeamData data;
+    private final TeamContext data;
     private final Location spawn;
     private final Set<Player> players;
 
     public SpectatorTeam(Location spawn) {
         this.spawn = spawn;
         this.players = new LinkedHashSet<>();
-        this.data = new SpectatorTeamData("Наблюдатель");
+        this.data = new SpectatorTeamContext("Наблюдатель");
     }
 
     @Override
@@ -54,7 +54,7 @@ public class SpectatorTeam implements Team {
     }
 
     @Override
-    public @NotNull TeamData getData() {
+    public @NotNull Team.TeamContext getData() {
         return data;
     }
 
@@ -63,12 +63,12 @@ public class SpectatorTeam implements Team {
         return SPECTATOR_ROLE;
     }
 
-    private static class SpectatorTeamData implements TeamData {
+    private static class SpectatorTeamContext implements TeamContext {
 
         private final String name;
         private final Color color = Color.GRAY;
 
-        public SpectatorTeamData(String name) {
+        public SpectatorTeamContext(String name) {
             this.name = name;
         }
 

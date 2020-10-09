@@ -1,7 +1,7 @@
 package pw.zakharov.amongcraft.service;
 
 import org.jetbrains.annotations.NotNull;
-import pw.zakharov.amongcraft.api.arena.Team;
+import pw.zakharov.amongcraft.api.team.Team;
 
 import java.util.Optional;
 import java.util.Set;
