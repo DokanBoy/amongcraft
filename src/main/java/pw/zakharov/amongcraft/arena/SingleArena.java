@@ -24,9 +24,7 @@ import pw.zakharov.amongcraft.team.InnocentTeam;
 import pw.zakharov.amongcraft.team.SpectatorTeam;
 import pw.zakharov.amongcraft.util.LocationUtil;
 
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static pw.zakharov.amongcraft.api.arena.Arena.State.*;
@@ -107,7 +105,8 @@ public class SingleArena implements Arena {
         }
 
         setStatus(STARTED);
-        Events.callSync(new ArenaStartEvent());
+
+        Events.callSync(new ArenaStartEvent(this));
         Helper.server().broadcast(new TextComponent("Арена запущена!"));
     }
 
@@ -129,7 +128,7 @@ public class SingleArena implements Arena {
 
         setStatus(ENABLED);
         Helper.server().broadcast(new TextComponent("Арена остановлена"));
-        Events.callSync(new ArenaStopEvent());
+        Events.callSync(new ArenaStopEvent(this, cause));
     }
 
     @Override
@@ -229,6 +228,13 @@ public class SingleArena implements Arena {
         @Override
         public @NotNull Set<Team> getTeams() {
             return teams;
+        }
+
+        @Override
+        public @NotNull List<Player> getPlayers() {
+            List<Player> players = new ArrayList<>();
+            teams.forEach(team -> players.addAll(team.getPlayers()));
+            return players;
         }
 
         @Override

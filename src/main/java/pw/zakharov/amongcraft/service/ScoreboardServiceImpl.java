@@ -1,6 +1,7 @@
 package pw.zakharov.amongcraft.service;
 
 import me.lucko.helper.scoreboard.Scoreboard;
+import me.lucko.helper.utils.Log;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,6 +23,10 @@ public class ScoreboardServiceImpl implements ScoreboardService {
 
     @Override
     public void register(@NotNull String id, @NotNull Scoreboard scoreboard) {
+        if (scoreboards.containsKey(id)) {
+            Log.warn("Scoreboard with ID " + id + " already register!");
+            return;
+        }
         scoreboards.put(id, scoreboard);
     }
 

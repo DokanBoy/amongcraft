@@ -1,6 +1,7 @@
 package pw.zakharov.amongcraft.api.arena;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -19,6 +20,8 @@ public interface ArenaContext {
     }
 
     @NotNull Set<Team> getTeams();
+
+    @NotNull List<Player> getPlayers();
 
     @NotNull Location getLobby();
 }

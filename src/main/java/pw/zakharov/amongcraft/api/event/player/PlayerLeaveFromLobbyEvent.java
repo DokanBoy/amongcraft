@@ -5,9 +5,9 @@ import org.bukkit.event.HandlerList;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
- * Date: 04.10.2020 21:05
+ * Date: 10.10.2020 1:50
  */
-public class PlayerJoinEvent extends Event {
+public class PlayerLeaveFromLobbyEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
 

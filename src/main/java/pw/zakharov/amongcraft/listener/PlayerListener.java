@@ -1,9 +1,8 @@
 package pw.zakharov.amongcraft.listener;
 
-import com.destroystokyo.paper.event.player.PlayerJumpEvent;
-import me.lucko.helper.plugin.ExtendedJavaPlugin;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -31,7 +30,7 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onJump(PlayerJumpEvent event) {
+    public void onInteract(PlayerInteractEvent event) {
 
     }
 

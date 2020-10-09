@@ -23,4 +23,5 @@ public interface Member {
                 .filter(stat -> stat.getType() == type)
                 .findFirst().orElseThrow(NullPointerException::new);
     }
+
 }
