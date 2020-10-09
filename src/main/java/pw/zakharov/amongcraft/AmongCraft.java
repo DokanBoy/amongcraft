@@ -42,7 +42,7 @@ public final class AmongCraft extends ExtendedJavaPlugin {
                 .assertPlayer()
                 .handler(context -> {
 
-                    singleArena.stop(5);
+                    singleArena.stop(Arena.StopCause.UNKNOWN, 5);
                     singleArena.disable();
                 })
                 .register("stop");
@@ -50,7 +50,7 @@ public final class AmongCraft extends ExtendedJavaPlugin {
 
     @Override
     protected void disable() {
-        singleArena.stop();
+        singleArena.stop(Arena.StopCause.UNKNOWN);
         singleArena.disable();
     }
 

@@ -84,7 +84,7 @@ public class SingleArena implements Arena {
     @Override
     public void disable() {
         if (state == DISABLED) return;
-        if (state == STARTED) stop();
+        if (state == STARTED) stop(Arena.StopCause.UNKNOWN);
 
         Players.all().forEach(player -> player.kickPlayer("Arena disabled"));
         Helper.server().unloadWorld(world, false);
@@ -125,7 +125,7 @@ public class SingleArena implements Arena {
     }
 
     @Override
-    public void stop() {
+    public void stop(StopCause cause) {
         if (!(state == STARTING || state == STARTED)) return; // todo: optimize expression
 
         setStatus(ENABLED);
@@ -134,14 +134,14 @@ public class SingleArena implements Arena {
     }
 
     @Override
-    public void stop(int afterSec) {
+    public void stop(StopCause cause, int afterSec) {
         if (state == STARTING || state == STARTED) return;
 
         Helper.server().broadcast(new TextComponent("Остановка арены через " + afterSec + " сек"));
         Schedulers.builder()
                 .sync()
                 .after(afterSec, TimeUnit.SECONDS)
-                .run(this::stop);
+                .run(() -> stop(cause));
     }
 
     @Override
