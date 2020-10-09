@@ -21,10 +21,14 @@ import pw.zakharov.amongcraft.api.event.arena.ArenaStopEvent;
 import pw.zakharov.amongcraft.team.ImposterTeam;
 import pw.zakharov.amongcraft.team.InnocentTeam;
 import pw.zakharov.amongcraft.team.SpectatorTeam;
+import pw.zakharov.amongcraft.util.LocationUtil;
 
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
+import static pw.zakharov.amongcraft.api.arena.Arena.State.*;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
@@ -45,7 +49,7 @@ public class SingleArena implements Arena {
                        int teams) {
         this.arenaName = arenaName;
         this.worldName = worldName;
-        this.state = State.DISABLED;
+        this.state = DISABLED;
 
         Log.info("Created arena: " + toString());
         this.context = new SingleArenaContext(lobbyLocation, teams);
@@ -63,35 +67,57 @@ public class SingleArena implements Arena {
     }
 
     @Override
+    public @NotNull String getName() {
+        return arenaName;
+    }
+
+    @Override
     public void enable() {
+        if (state == ENABLED) return;
+
         world = Helper.server().getWorld(worldName);
         setupWorld();
 
-        setStatus(State.ENABLED);
+        setStatus(ENABLED);
     }
 
     @Override
     public void disable() {
-        setStatus(State.DISABLED);
+        if (state == DISABLED) return;
+        if (state == STARTED) stop();
 
-        Players.all().forEach(player -> player.kickPlayer(""));
+        Players.all().forEach(player -> player.kickPlayer("Arena disabled"));
         Helper.server().unloadWorld(world, false);
+
+        setStatus(DISABLED);
     }
 
     @Override
     public void start() {
-        TextComponent textComponent = new TextComponent("Арена запущена!");
-        Helper.server().broadcast(textComponent);
+        if (!(state == ENABLED || state == STARTING)) return;
+        setStatus(STARTING);
 
-        context.getTeams().forEach(team -> team.getPlayers().forEach(player -> player.teleport(team.getSpawn())));
+        final Set<Team> teams = context.getTeams();
+        for (Team t : teams) {
+            final Set<Player> teamPlayers = t.getPlayers();
+            final Iterator<Location> spawns = LocationUtil.getEndlessLocationIterator(t.getSpawn(), 3);
+            for (Player p : teamPlayers) {
+                p.teleport(spawns.next());
+                p.sendMessage(new TextComponent("Игра началась! Вы телепортированы на арену."));
+            }
+        }
+
+        setStatus(STARTED);
         Events.callSync(new ArenaStartEvent());
+        Helper.server().broadcast(new TextComponent("Арена запущена!"));
     }
 
     @Override
     public void start(int afterSec) {
-        TextComponent textComponent = new TextComponent("Запуск арены через " + afterSec + " сек");
-        Helper.server().broadcast(textComponent);
+        if (!(state == ENABLED || state == STARTING)) return;
 
+        setStatus(STARTING);
+        Helper.server().broadcast(new TextComponent("Запуск арены через " + afterSec + " сек"));
         Schedulers.builder()
                 .sync()
                 .after(afterSec, TimeUnit.SECONDS)
@@ -100,26 +126,22 @@ public class SingleArena implements Arena {
 
     @Override
     public void stop() {
-        TextComponent textComponent = new TextComponent("Арена остановлена");
-        Helper.server().broadcast(textComponent);
+        if (!(state == STARTING || state == STARTED)) return; // todo: optimize expression
 
+        setStatus(ENABLED);
+        Helper.server().broadcast(new TextComponent("Арена остановлена"));
         Events.callSync(new ArenaStopEvent());
     }
 
     @Override
     public void stop(int afterSec) {
-        TextComponent textComponent = new TextComponent("Остановка арены через " + afterSec + " сек");
-        Helper.server().broadcast(textComponent);
+        if (state == STARTING || state == STARTED) return;
 
+        Helper.server().broadcast(new TextComponent("Остановка арены через " + afterSec + " сек"));
         Schedulers.builder()
                 .sync()
                 .after(afterSec, TimeUnit.SECONDS)
                 .run(this::stop);
-    }
-
-    @Override
-    public boolean canStart() {
-        return state != State.ENABLED;
     }
 
     @Override
@@ -136,11 +158,29 @@ public class SingleArena implements Arena {
         return state;
     }
 
+    @Override
     public void randomJoin(@NotNull Player player) {
         join(player, RandomSelector.uniform(context.getTeams()).pick());
     }
 
+    @Override
     public void join(@NotNull Player player, @NotNull Team team) {
+        if (state == DISABLED) {
+            Log.warn("Arena " + arenaName + " is disabled. Enable before join!" + "");
+            return;
+        }
+
+        if (state == STARTED) {
+            Team specTeam = getContext().getTeams()
+                    .stream()
+                    .filter(t -> t.getRole() == Team.Role.SPECTATOR)
+                    .findAny()
+                    .orElseThrow(NullPointerException::new);
+            specTeam.join(player);
+            Log.info("Player " + player.getName() + " joined to " + specTeam.getData().getName());
+            return;
+        }
+
         Optional<Team> currentTeam = getContext().getTeams()
                 .stream()
                 .filter(t -> t.getPlayers().contains(player))
@@ -150,6 +190,7 @@ public class SingleArena implements Arena {
             return;
         }
         team.join(player);
+        player.teleport(context.getLobby());
         Log.info("Player " + player.getName() + " joined to " + team.getData().getName());
     }
 
@@ -170,9 +211,9 @@ public class SingleArena implements Arena {
 
         public SingleArenaContext(@NotNull Location lobbyLocation, int maxTeams) {
             this.teams = ImmutableSet.of(
-                    new ImposterTeam(lobbyLocation.add(5, 0, 10), 12),
-                    new InnocentTeam(lobbyLocation.add(-5, 5, 10), 12),
-                    new SpectatorTeam(lobbyLocation.add(5, 5, 10))
+                    new ImposterTeam(lobbyLocation.add(10, 0, 10), 2),
+                    new InnocentTeam(lobbyLocation.add(15, 0, 15), 12),
+                    new SpectatorTeam(lobbyLocation.add(20, 0, 20))
             );
             this.maxTeams = maxTeams;
             this.lobbyLocation = lobbyLocation;

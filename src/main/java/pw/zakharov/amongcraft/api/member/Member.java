@@ -10,6 +10,7 @@ import java.util.UUID;
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
  * Date: 04.10.2020 18:37
  */
+@Deprecated
 public interface Member {
 
     @NotNull UUID getId();

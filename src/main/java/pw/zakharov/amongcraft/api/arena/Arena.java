@@ -2,12 +2,15 @@ package pw.zakharov.amongcraft.api.arena;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import pw.zakharov.amongcraft.service.ArenaService;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
  * Date: 04.10.2020 18:05
  */
 public interface Arena {
+
+    @NotNull String getName();
 
     void enable();
 
@@ -17,11 +20,9 @@ public interface Arena {
 
     void start(int afterSec);
 
-    void stop();
+    void stop(StopCause cause);
 
-    void stop(int afterSec);
-
-    boolean canStart();
+    void stop(StopCause cause, int afterSec);
 
     @NotNull ArenaContext getContext();
 
@@ -34,6 +35,15 @@ public interface Arena {
     enum State {
         ENABLED,
         DISABLED,
+        STARTING,
+        STARTED,
+        ;
+    }
+
+    enum StopCause {
+        INNOCENT_WIN,
+        IMPOSTER_WIN,
+        UNKNOWN,
         ;
     }
 
