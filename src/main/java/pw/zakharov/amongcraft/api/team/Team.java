@@ -13,32 +13,81 @@ import java.util.Set;
  */
 public interface Team {
 
+    /**
+     * @return количество игроков в команде
+     */
     int getSize();
 
+    /**
+     * @return максимальное количество игроков в команде
+     */
     int getMaxSize();
 
-    default void join(@NotNull Player player) {
+    /**
+     * Запихиваем игрока в команду, если в ней есть место или у игрока хватает прав на форсированное вступление
+     *
+     * @param player игрок, которого хотим запихнуть в команду
+     * @return можем ли добавить игрока в команду
+     */
+    default boolean join(@NotNull Player player) {
         if (getMaxSize() > getSize() || player.hasPermission("among.admin")) {
             getPlayers().add(player);
+            return true;
         }
+        return false;
     }
 
-    @NotNull Location getSpawn();
 
+    default void leave(@NotNull Player player) {
+        getPlayers().remove(player);
+    }
+
+    /**
+     * @return все точки спавна команду
+     */
+    @NotNull Set<Location> getSpawns();
+
+    /**
+     * Итератор цикличный
+     *
+     * @return следующий спавн этой команды.
+     */
+    @NotNull Location getNextSpawn();
+
+    /**
+     * @return список всех игроков в команде
+     */
     @NotNull Set<Player> getPlayers();
 
-    @NotNull TeamContext getData();
+    /**
+     * @return контекст арены
+     */
+    @NotNull TeamContext getContext();
 
-    @NotNull Role getRole();
-
+    /**
+     * Контекст арены
+     */
     interface TeamContext {
 
+        /**
+         * @return название команды
+         */
         @NotNull String getName();
 
+        /**
+         * @return цвет команды
+         */
         @NotNull Color getColor();
 
+        /**
+         * @return роль команды
+         */
+        @NotNull Role getRole();
     }
 
+    /**
+     * Роли команд
+     */
     enum Role {
         IMPOSTER,
         INNOCENT,

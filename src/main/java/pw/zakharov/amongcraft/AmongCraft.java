@@ -10,6 +10,9 @@ import org.bukkit.WorldType;
 import pw.zakharov.amongcraft.api.arena.Arena;
 import pw.zakharov.amongcraft.arena.SingleArena;
 import pw.zakharov.amongcraft.service.*;
+import pw.zakharov.amongcraft.service.impl.ArenaServiceImpl;
+import pw.zakharov.amongcraft.service.impl.ScoreboardServiceImpl;
+import pw.zakharov.amongcraft.service.impl.TeamServiceImpl;
 
 import static pw.zakharov.amongcraft.api.arena.Arena.StopCause.UNKNOWN;
 

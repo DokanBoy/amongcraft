@@ -1,9 +1,10 @@
-package pw.zakharov.amongcraft.service;
+package pw.zakharov.amongcraft.service.impl;
 
 import me.lucko.helper.scoreboard.Scoreboard;
 import me.lucko.helper.utils.Log;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
+import pw.zakharov.amongcraft.service.ScoreboardService;
 
 import java.util.*;
 

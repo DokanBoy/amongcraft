@@ -1,5 +1,6 @@
 package pw.zakharov.amongcraft.service;
 
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import pw.zakharov.amongcraft.api.team.Team;
 
@@ -17,6 +18,8 @@ public interface TeamService {
     void unregister(@NotNull String name);
 
     Optional<Team> getTeam(@NotNull String name);
+
+    Optional<Team> getPlayerTeam(@NotNull Player player);
 
     @NotNull Set<Team> getTeams();
 

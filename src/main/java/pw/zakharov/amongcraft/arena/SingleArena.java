@@ -1,5 +1,6 @@
 package pw.zakharov.amongcraft.arena;
 
+import com.google.common.collect.ImmutableSet;
 import me.lucko.helper.Events;
 import me.lucko.helper.Helper;
 import me.lucko.helper.Schedulers;
@@ -15,16 +16,18 @@ import org.jetbrains.annotations.NotNull;
 import pw.zakharov.amongcraft.AmongCraft;
 import pw.zakharov.amongcraft.api.arena.Arena;
 import pw.zakharov.amongcraft.api.arena.ArenaContext;
-import pw.zakharov.amongcraft.api.team.Team;
 import pw.zakharov.amongcraft.api.event.arena.ArenaStartEvent;
 import pw.zakharov.amongcraft.api.event.arena.ArenaStopEvent;
+import pw.zakharov.amongcraft.api.team.Team;
 import pw.zakharov.amongcraft.service.TeamService;
 import pw.zakharov.amongcraft.team.ImposterTeam;
 import pw.zakharov.amongcraft.team.InnocentTeam;
 import pw.zakharov.amongcraft.team.SpectatorTeam;
-import pw.zakharov.amongcraft.util.LocationUtil;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static pw.zakharov.amongcraft.api.arena.Arena.State.*;
@@ -97,9 +100,8 @@ public class SingleArena implements Arena {
         final Set<Team> teams = context.getTeams();
         for (Team t : teams) {
             final Set<Player> teamPlayers = t.getPlayers();
-            final Iterator<Location> spawns = LocationUtil.getEndlessLocationIterator(t.getSpawn(), 3);
             for (Player p : teamPlayers) {
-                p.teleport(spawns.next());
+                p.teleport(t.getNextSpawn());
                 p.sendMessage(new TextComponent("Игра началась! Вы телепортированы на арену."));
             }
         }
@@ -171,11 +173,11 @@ public class SingleArena implements Arena {
         if (state == STARTED) {
             Team specTeam = getContext().getTeams()
                     .stream()
-                    .filter(t -> t.getRole() == Team.Role.SPECTATOR)
+                    .filter(t -> t.getContext().getRole() == Team.Role.SPECTATOR)
                     .findAny()
                     .orElseThrow(NullPointerException::new);
             specTeam.join(player);
-            Log.info("Player " + player.getName() + " joined to " + specTeam.getData().getName());
+            Log.info("Player " + player.getName() + " joined to " + specTeam.getContext().getName());
             return;
         }
 
@@ -184,12 +186,12 @@ public class SingleArena implements Arena {
                 .filter(t -> t.getPlayers().contains(player))
                 .findFirst();
         if (currentTeam.isPresent()) {
-            Log.info("Player already in " + currentTeam.get().getData().getName());
+            Log.info("Player already in " + currentTeam.get().getContext().getName());
             return;
         }
         team.join(player);
         player.teleport(context.getLobby());
-        Log.info("Player " + player.getName() + " joined to " + team.getData().getName());
+        Log.info("Player " + player.getName() + " joined to " + team.getContext().getName());
     }
 
     @Override
@@ -209,9 +211,9 @@ public class SingleArena implements Arena {
 
         public SingleArenaContext(@NotNull Location lobbyLocation, int maxTeams) {
             final TeamService teamService = AmongCraft.getTeamService();
-            teamService.register(new ImposterTeam(lobbyLocation.add(10, 0, 10), 2));
-            teamService.register(new InnocentTeam(lobbyLocation.add(15, 0, 15), 12));
-            teamService.register(new SpectatorTeam(lobbyLocation.add(20, 0, 20)));
+            teamService.register(new ImposterTeam(ImmutableSet.of(lobbyLocation.add(10, 0, 10)), 2));
+            teamService.register(new InnocentTeam(ImmutableSet.of(lobbyLocation.add(15, 0, 15)), 2));
+            teamService.register(new SpectatorTeam(ImmutableSet.of(lobbyLocation.add(20, 0, 20))));
 
             this.teams = teamService.getTeams();
             this.maxTeams = maxTeams;

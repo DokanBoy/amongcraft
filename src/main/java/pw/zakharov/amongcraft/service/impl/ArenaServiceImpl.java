@@ -1,9 +1,10 @@
-package pw.zakharov.amongcraft.service;
+package pw.zakharov.amongcraft.service.impl;
 
 import me.lucko.helper.utils.Log;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import pw.zakharov.amongcraft.api.arena.Arena;
+import pw.zakharov.amongcraft.service.ArenaService;
 
 import java.util.LinkedHashSet;
 import java.util.Optional;
