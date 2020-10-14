@@ -5,7 +5,7 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import pw.zakharov.amongcraft.api.team.Team;
+import pw.zakharov.amongcraft.api.Team;
 
 import java.util.Iterator;
 import java.util.LinkedHashSet;

@@ -1,4 +1,4 @@
-package pw.zakharov.amongcraft.api.task;
+package pw.zakharov.amongcraft.api;
 
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
@@ -9,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Task {
 
+    @NotNull TaskContext getContext();
+
     @NotNull Location getStartPosition();
 
     @NotNull Location getTaskLocation();
@@ -18,6 +20,10 @@ public interface Task {
     void start();
 
     void complete();
+
+    interface TaskContext {
+        @NotNull String getName();
+    }
 
     enum State {
         NOT_COMPLETED,

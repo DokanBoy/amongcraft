@@ -4,8 +4,8 @@ import me.lucko.helper.utils.Log;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-import pw.zakharov.amongcraft.api.arena.Arena;
-import pw.zakharov.amongcraft.api.team.Team;
+import pw.zakharov.amongcraft.api.Arena;
+import pw.zakharov.amongcraft.api.Team;
 import pw.zakharov.amongcraft.service.TeamService;
 
 import java.util.*;

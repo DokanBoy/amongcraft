@@ -2,7 +2,7 @@ package pw.zakharov.amongcraft.service;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import pw.zakharov.amongcraft.api.team.Team;
+import pw.zakharov.amongcraft.api.Team;
 
 import java.util.Optional;
 import java.util.Set;

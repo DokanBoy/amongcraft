@@ -2,7 +2,7 @@ package pw.zakharov.amongcraft.api.member;
 
 import org.jetbrains.annotations.NotNull;
 import pw.zakharov.amongcraft.api.stat.Statistic;
-import pw.zakharov.amongcraft.api.task.Task;
+import pw.zakharov.amongcraft.api.Task;
 
 import java.util.Set;
 import java.util.UUID;

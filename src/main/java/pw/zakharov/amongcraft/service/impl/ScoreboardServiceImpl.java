@@ -42,7 +42,7 @@ public class ScoreboardServiceImpl implements ScoreboardService {
     }
 
     @Override
-    public @NotNull Set<Scoreboard> getScoreboards(@NotNull String id) {
+    public @NotNull Set<Scoreboard> getScoreboards() {
         return new HashSet<>(scoreboards.values());
     }
 

@@ -1,4 +1,4 @@
-package pw.zakharov.amongcraft.api.team;
+package pw.zakharov.amongcraft.api;
 
 import org.bukkit.Color;
 import org.bukkit.Location;

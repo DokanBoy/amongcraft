@@ -18,6 +18,6 @@ public interface ScoreboardService {
 
     Optional<Scoreboard> getScoreboard(@NotNull String id);
 
-    @NotNull Set<Scoreboard> getScoreboards(@NotNull String id);
+    @NotNull Set<Scoreboard> getScoreboards();
 
 }

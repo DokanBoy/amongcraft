@@ -3,7 +3,7 @@ package pw.zakharov.amongcraft.service.impl;
 import me.lucko.helper.utils.Log;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-import pw.zakharov.amongcraft.api.arena.Arena;
+import pw.zakharov.amongcraft.api.Arena;
 import pw.zakharov.amongcraft.service.ArenaService;
 
 import java.util.LinkedHashSet;
@@ -26,8 +26,8 @@ public class ArenaServiceImpl implements ArenaService {
 
     @Override
     public void register(@NotNull Arena arena) {
-        if (arenas.stream().anyMatch(a -> a.getName().equals(arena.getName()))) {
-            Log.warn("Arena with name " + arena.getName() + " already register!");
+        if (arenas.stream().anyMatch(a -> a.getContext().getName().equals(arena.getContext().getName()))) {
+            Log.warn("Arena with name " + arena.getContext().getName() + " already register!");
             return;
         }
         arenas.add(arena);
@@ -37,7 +37,7 @@ public class ArenaServiceImpl implements ArenaService {
     @Override
     public void unregister(@NotNull String name) {
         Optional<Arena> arena = arenas.stream()
-                .filter(a -> a.getName().equals(name))
+                .filter(a -> a.getContext().getName().equals(name))
                 .findFirst();
 
         arena.ifPresent(a -> {
@@ -49,7 +49,7 @@ public class ArenaServiceImpl implements ArenaService {
 
     @Override
     public Optional<Arena> getArena(@NotNull String name) {
-        return arenas.stream().filter(a -> a.getName().equals(name)).findFirst();
+        return arenas.stream().filter(a -> a.getContext().getName().equals(name)).findFirst();
     }
 
     @Override

@@ -1,16 +1,16 @@
-package pw.zakharov.amongcraft.api.arena;
+package pw.zakharov.amongcraft.api;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import pw.zakharov.amongcraft.api.team.Team;
+
+import java.util.Set;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
  * Date: 04.10.2020 18:05
  */
 public interface Arena {
-
-    @NotNull String getName();
 
     void enable();
 
@@ -31,6 +31,24 @@ public interface Arena {
     @NotNull ArenaContext getContext();
 
     @NotNull State getState();
+
+    interface ArenaContext {
+
+        @NotNull String getName();
+
+        int getMaxTeams();
+
+        default int getTeamsAmount() {
+            return getTeams().size();
+        }
+
+        @NotNull Set<Team> getTeams();
+
+        @NotNull Set<Player> getPlayers();
+
+        @NotNull Location getLobby();
+
+    }
 
     enum State {
         ENABLED,

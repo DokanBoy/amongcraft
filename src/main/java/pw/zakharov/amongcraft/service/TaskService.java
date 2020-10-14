@@ -1,23 +1,23 @@
 package pw.zakharov.amongcraft.service;
 
 import org.jetbrains.annotations.NotNull;
-import pw.zakharov.amongcraft.api.Arena;
+import pw.zakharov.amongcraft.api.Task;
 
 import java.util.Optional;
 import java.util.Set;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
- * Date: 09.10.2020 20:11
+ * Date: 14.10.2020 17:45
  */
-public interface ArenaService {
+public interface TaskService {
 
-    void register(@NotNull Arena arena);
+    void register(@NotNull Task task);
 
     void unregister(@NotNull String name);
 
-    Optional<Arena> getArena(@NotNull String name);
+    Optional<Task> getTask(@NotNull String name);
 
-    @NotNull Set<Arena> getArenas();
+    @NotNull Set<Task> getTasks();
 
 }

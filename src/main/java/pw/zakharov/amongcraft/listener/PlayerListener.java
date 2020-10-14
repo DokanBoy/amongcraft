@@ -13,7 +13,7 @@ import pw.zakharov.amongcraft.service.ArenaService;
 import pw.zakharov.amongcraft.service.TeamService;
 import pw.zakharov.amongcraft.util.ArmorStandUtils;
 
-import static pw.zakharov.amongcraft.api.team.Team.Role.IMPOSTER;
+import static pw.zakharov.amongcraft.api.Team.Role.IMPOSTER;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>

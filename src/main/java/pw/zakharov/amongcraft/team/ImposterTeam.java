@@ -18,7 +18,7 @@ public class ImposterTeam extends AbstractTeam {
 
     private static class ImposterTeamContext extends AbstractTeamContext {
 
-        public ImposterTeamContext(@NotNull String name) {
+        private ImposterTeamContext(@NotNull String name) {
             super(name, Color.RED, Role.IMPOSTER);
         }
 

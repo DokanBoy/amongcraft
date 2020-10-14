@@ -14,21 +14,22 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import pw.zakharov.amongcraft.AmongCraft;
-import pw.zakharov.amongcraft.api.arena.Arena;
-import pw.zakharov.amongcraft.api.arena.ArenaContext;
+import pw.zakharov.amongcraft.api.Arena;
+import pw.zakharov.amongcraft.api.Team;
 import pw.zakharov.amongcraft.api.event.arena.ArenaStartEvent;
 import pw.zakharov.amongcraft.api.event.arena.ArenaStopEvent;
-import pw.zakharov.amongcraft.api.team.Team;
 import pw.zakharov.amongcraft.service.TeamService;
 import pw.zakharov.amongcraft.team.ImposterTeam;
 import pw.zakharov.amongcraft.team.InnocentTeam;
 import pw.zakharov.amongcraft.team.SpectatorTeam;
 
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-import static pw.zakharov.amongcraft.api.arena.Arena.State.*;
-import static pw.zakharov.amongcraft.api.arena.Arena.StopCause.UNKNOWN;
+import static pw.zakharov.amongcraft.api.Arena.State.*;
+import static pw.zakharov.amongcraft.api.Arena.StopCause.UNKNOWN;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
@@ -38,7 +39,6 @@ public class SingleArena implements Arena {
 
     private @NotNull State state;
 
-    private final @NotNull String arenaName;
     private final @NotNull World world;
     private final @NotNull ArenaContext context;
 
@@ -46,16 +46,14 @@ public class SingleArena implements Arena {
                        @NotNull World world,
                        @NotNull Location lobbyLocation,
                        int teams) {
-        this.arenaName = arenaName;
         this.world = world;
         this.state = DISABLED;
 
         Log.info("Created arena: " + toString());
-        this.context = new SingleArenaContext(lobbyLocation, teams);
+        this.context = new SingleArenaContext(arenaName, lobbyLocation, teams);
     }
 
     private void setupWorld() {
-        world.setPVP(false);
         world.setAutoSave(false);
         world.setDifficulty(Difficulty.EASY);
 
@@ -63,11 +61,6 @@ public class SingleArena implements Arena {
         world.setAmbientSpawnLimit(0);
         world.setAnimalSpawnLimit(0);
         world.setWaterAnimalSpawnLimit(0);
-    }
-
-    @Override
-    public @NotNull String getName() {
-        return arenaName;
     }
 
     @Override
@@ -163,7 +156,7 @@ public class SingleArena implements Arena {
     @Override
     public void join(@NotNull Player player, @NotNull Team team) {
         if (state == DISABLED) {
-            Log.warn("Arena " + arenaName + " is disabled. Enable before join!" + "");
+            Log.warn("Arena " + context.getName() + " is disabled. Enable before join!" + "");
             return;
         }
 
@@ -196,7 +189,7 @@ public class SingleArena implements Arena {
     @Override
     public String toString() {
         return "SingleArena{" +
-                "name='" + arenaName +
+                "name='" + context.getName() +
                 ", world=" + world +
                 ", status=" + state +
                 '}';
@@ -204,21 +197,28 @@ public class SingleArena implements Arena {
 
     public static class SingleArenaContext implements ArenaContext {
 
+        private final @NotNull String arenaName;
         private final @NotNull Location lobbyLocation;
         private final @NotNull Set<Team> teams;
         private final int maxTeams;
 
-        public SingleArenaContext(@NotNull Location lobbyLocation, int maxTeams) {
+        public SingleArenaContext(@NotNull String arenaName, @NotNull Location lobbyLocation, int maxTeams) {
             final TeamService teamService = AmongCraft.getTeamService();
             teamService.register(new ImposterTeam(ImmutableSet.of(lobbyLocation.add(10, 0, 10)), 2));
             teamService.register(new InnocentTeam(ImmutableSet.of(lobbyLocation.add(15, 0, 15)), 2));
             teamService.register(new SpectatorTeam(ImmutableSet.of(lobbyLocation.add(20, 0, 20))));
 
+            this.arenaName = arenaName;
             this.teams = teamService.getTeams();
             this.maxTeams = maxTeams;
             this.lobbyLocation = lobbyLocation;
 
             Log.info("Created arena context: " + toString());
+        }
+
+        @Override
+        public @NotNull String getName() {
+            return arenaName;
         }
 
         @Override
@@ -246,11 +246,12 @@ public class SingleArena implements Arena {
         @Override
         public String toString() {
             return "SingleArenaContext{" +
-                    "teams=" + teams +
+                    "arenaName='" + arenaName +
+                    ", lobbyLocation=" + lobbyLocation +
+                    ", teams=" + teams +
                     ", maxTeams=" + maxTeams +
                     '}';
         }
-
     }
 
 }

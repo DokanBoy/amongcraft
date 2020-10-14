@@ -25,7 +25,7 @@ public class SpectatorTeam extends AbstractTeam {
 
     private static class SpectatorTeamContext extends AbstractTeamContext {
 
-        public SpectatorTeamContext(@NotNull String name) {
+        private SpectatorTeamContext(@NotNull String name) {
             super(name, Color.GRAY, Role.SPECTATOR);
         }
 
