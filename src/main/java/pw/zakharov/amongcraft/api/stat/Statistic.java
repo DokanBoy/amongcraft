@@ -1,14 +1,18 @@
 package pw.zakharov.amongcraft.api.stat;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
  * Date: 04.10.2020 18:38
  */
-public interface Statistic {
+public interface Statistic<V> {
 
-    String getName();
+    @NotNull String getName();
 
-    Type getType();
+    @NotNull Type getType();
+
+    @NotNull V getValue();
 
     enum Type {
         KILL_INNOCENT,

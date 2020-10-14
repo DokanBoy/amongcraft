@@ -22,7 +22,7 @@ public interface ArenaContext {
 
     @NotNull Set<Team> getTeams();
 
-    @NotNull List<Player> getPlayers();
+    @NotNull Set<Player> getPlayers();
 
     @NotNull Location getLobby();
 

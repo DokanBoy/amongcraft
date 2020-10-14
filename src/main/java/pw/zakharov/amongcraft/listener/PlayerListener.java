@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
+import pw.zakharov.amongcraft.service.ArenaService;
 import pw.zakharov.amongcraft.service.TeamService;
 import pw.zakharov.amongcraft.util.ArmorStandUtils;
 
@@ -21,10 +22,14 @@ import static pw.zakharov.amongcraft.api.team.Team.Role.IMPOSTER;
 public class PlayerListener implements Listener {
 
     private final @NotNull Plugin plugin;
+    private final @NotNull ArenaService arenaService;
     private final @NotNull TeamService teamService;
 
-    public PlayerListener(@NotNull Plugin plugin, @NotNull TeamService teamService) {
+    public PlayerListener(@NotNull Plugin plugin,
+                          @NotNull ArenaService arenaService,
+                          @NotNull TeamService teamService) {
         this.plugin = plugin;
+        this.arenaService = arenaService;
         this.teamService = teamService;
     }
 
@@ -38,7 +43,9 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-
+        teamService.getPlayerTeam(player).ifPresent(team -> {
+            team.leave(player);
+        });
         event.setQuitMessage("§cИгрок " + player.getName() + " §cвышел!");
     }
 

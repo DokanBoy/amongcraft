@@ -19,7 +19,7 @@ public class InnocentTeam extends AbstractTeam {
     private static class InnocentTeamContext extends AbstractTeamContext {
 
         public InnocentTeamContext(@NotNull String name) {
-            super(name, Color.GREEN, Role.IMPOSTER);
+            super(name, Color.GREEN, Role.INNOCENT);
         }
 
     }

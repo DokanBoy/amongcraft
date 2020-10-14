@@ -20,9 +20,9 @@ public interface Arena {
 
     void start(int afterSec);
 
-    void stop(StopCause cause);
+    void stop(@NotNull StopCause cause);
 
-    void stop(StopCause cause, int afterSec);
+    void stop(@NotNull StopCause cause, int afterSec);
 
     void randomJoin(@NotNull Player player);
 

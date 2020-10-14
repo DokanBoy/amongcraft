@@ -17,7 +17,8 @@ public class ArenaListener implements Listener {
     private final @NotNull Plugin plugin;
     private final @NotNull ArenaService arenaService;
 
-    public ArenaListener(@NotNull Plugin plugin, @NotNull ArenaService arenaService) {
+    public ArenaListener(@NotNull Plugin plugin,
+                         @NotNull ArenaService arenaService) {
         this.plugin = plugin;
         this.arenaService = arenaService;
     }

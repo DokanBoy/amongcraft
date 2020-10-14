@@ -37,7 +37,9 @@ public interface Team {
         return false;
     }
 
-
+    /**
+     * @param player игрок которого нужно выгнать из команды
+     */
     default void leave(@NotNull Player player) {
         getPlayers().remove(player);
     }

@@ -24,10 +24,7 @@ import pw.zakharov.amongcraft.team.ImposterTeam;
 import pw.zakharov.amongcraft.team.InnocentTeam;
 import pw.zakharov.amongcraft.team.SpectatorTeam;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 import static pw.zakharov.amongcraft.api.arena.Arena.State.*;
@@ -125,7 +122,7 @@ public class SingleArena implements Arena {
     }
 
     @Override
-    public void stop(StopCause cause) {
+    public void stop(@NotNull StopCause cause) {
         if (!(state == STARTING || state == STARTED)) return; // todo: optimize expression
 
         setStatus(ENABLED);
@@ -134,7 +131,7 @@ public class SingleArena implements Arena {
     }
 
     @Override
-    public void stop(StopCause cause, int afterSec) {
+    public void stop(@NotNull StopCause cause, int afterSec) {
         if (state == STARTING || state == STARTED) return;
 
         Helper.server().broadcast(new TextComponent("Остановка арены через " + afterSec + " сек"));
@@ -170,12 +167,12 @@ public class SingleArena implements Arena {
             return;
         }
 
+        Team specTeam = getContext().getTeams()
+                .stream()
+                .filter(t -> t.getContext().getRole() == Team.Role.SPECTATOR)
+                .findAny()
+                .orElseThrow(NullPointerException::new);
         if (state == STARTED) {
-            Team specTeam = getContext().getTeams()
-                    .stream()
-                    .filter(t -> t.getContext().getRole() == Team.Role.SPECTATOR)
-                    .findAny()
-                    .orElseThrow(NullPointerException::new);
             specTeam.join(player);
             Log.info("Player " + player.getName() + " joined to " + specTeam.getContext().getName());
             return;
@@ -189,7 +186,9 @@ public class SingleArena implements Arena {
             Log.info("Player already in " + currentTeam.get().getContext().getName());
             return;
         }
-        team.join(player);
+        if (!team.join(player)) {
+            specTeam.join(player);
+        }
         player.teleport(context.getLobby());
         Log.info("Player " + player.getName() + " joined to " + team.getContext().getName());
     }
@@ -233,8 +232,8 @@ public class SingleArena implements Arena {
         }
 
         @Override
-        public @NotNull List<Player> getPlayers() {
-            List<Player> players = new ArrayList<>();
+        public @NotNull Set<Player> getPlayers() {
+            Set<Player> players = new LinkedHashSet<>();
             teams.forEach(team -> players.addAll(team.getPlayers()));
             return players;
         }
