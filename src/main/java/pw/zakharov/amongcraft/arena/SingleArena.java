@@ -48,9 +48,10 @@ public class SingleArena implements Arena {
                        int teams) {
         this.world = world;
         this.state = DISABLED;
+        this.context = new SingleArenaContext(arenaName, lobbyLocation, teams);
 
         Log.info("Created arena: " + toString());
-        this.context = new SingleArenaContext(arenaName, lobbyLocation, teams);
+        enable();
     }
 
     private void setupWorld() {
@@ -66,8 +67,8 @@ public class SingleArena implements Arena {
     @Override
     public void enable() {
         if (state == ENABLED) return;
-        setupWorld();
 
+        setupWorld();
         setStatus(ENABLED);
     }
 
@@ -76,17 +77,16 @@ public class SingleArena implements Arena {
         if (state == DISABLED) return;
         if (state == STARTED) stop(UNKNOWN);
 
+        setStatus(DISABLED);
         Players.all().forEach(player -> player.kickPlayer("Arena disabled"));
         Helper.server().unloadWorld(world, false);
-
-        setStatus(DISABLED);
     }
 
     @Override
     public void start() {
-        if (!(state == ENABLED || state == STARTING)) return;
-        setStatus(STARTING);
+        if (state != STARTING && state != ENABLED) return;
 
+        setStatus(STARTING);
         final Set<Team> teams = context.getTeams();
         for (Team t : teams) {
             final Set<Player> teamPlayers = t.getPlayers();
@@ -97,14 +97,13 @@ public class SingleArena implements Arena {
         }
 
         setStatus(STARTED);
-
         Events.callSync(new ArenaStartEvent(this));
         Helper.server().broadcast(new TextComponent("Арена запущена!"));
     }
 
     @Override
     public void start(int afterSec) {
-        if (!(state == ENABLED || state == STARTING)) return;
+        if (state != ENABLED) return;
 
         setStatus(STARTING);
         Helper.server().broadcast(new TextComponent("Запуск арены через " + afterSec + " сек"));
@@ -116,7 +115,7 @@ public class SingleArena implements Arena {
 
     @Override
     public void stop(@NotNull StopCause cause) {
-        if (!(state == STARTING || state == STARTED)) return; // todo: optimize expression
+        if (state == ENABLED || state == DISABLED) return;
 
         setStatus(ENABLED);
         Helper.server().broadcast(new TextComponent("Арена остановлена"));
@@ -125,8 +124,9 @@ public class SingleArena implements Arena {
 
     @Override
     public void stop(@NotNull StopCause cause, int afterSec) {
-        if (state == STARTING || state == STARTED) return;
+        if (state != STARTED) return;
 
+        setStatus(STOPPING);
         Helper.server().broadcast(new TextComponent("Остановка арены через " + afterSec + " сек"));
         Schedulers.builder()
                 .sync()
@@ -160,7 +160,7 @@ public class SingleArena implements Arena {
             return;
         }
 
-        Team specTeam = getContext().getTeams()
+        Team specTeam = context.getTeams()
                 .stream()
                 .filter(t -> t.getContext().getRole() == Team.Role.SPECTATOR)
                 .findAny()
@@ -171,7 +171,7 @@ public class SingleArena implements Arena {
             return;
         }
 
-        Optional<Team> currentTeam = getContext().getTeams()
+        Optional<Team> currentTeam = context.getTeams()
                 .stream()
                 .filter(t -> t.getPlayers().contains(player))
                 .findFirst();
@@ -189,7 +189,7 @@ public class SingleArena implements Arena {
     @Override
     public String toString() {
         return "SingleArena{" +
-                "name='" + context.getName() +
+                "context=" + context +
                 ", world=" + world +
                 ", status=" + state +
                 '}';
@@ -212,8 +212,6 @@ public class SingleArena implements Arena {
             this.teams = teamService.getTeams();
             this.maxTeams = maxTeams;
             this.lobbyLocation = lobbyLocation;
-
-            Log.info("Created arena context: " + toString());
         }
 
         @Override

@@ -1,5 +1,6 @@
 package pw.zakharov.amongcraft.team;
 
+import com.google.common.base.Objects;
 import com.google.common.collect.Iterators;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -64,6 +65,32 @@ public abstract class AbstractTeam implements Team {
         return context;
     }
 
+    @Override
+    public String toString() {
+        return getClass().getName() + "{" +
+                "maxSize=" + maxSize +
+                ", context=" + context +
+                ", players=" + players +
+                ", spawns=" + spawns +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractTeam that = (AbstractTeam) o;
+        return maxSize == that.maxSize &&
+                Objects.equal(context, that.context) &&
+                Objects.equal(players, that.players) &&
+                Objects.equal(spawns, that.spawns);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(maxSize, context, players, spawns);
+    }
+
     protected abstract static class AbstractTeamContext implements TeamContext {
 
         private final @NotNull String name;
@@ -89,6 +116,30 @@ public abstract class AbstractTeam implements Team {
         @Override
         public @NotNull Role getRole() {
             return role;
+        }
+
+        @Override
+        public String toString() {
+            return getClass().getName() + "{" +
+                    "name='" + name + '\'' +
+                    ", color=" + color +
+                    ", role=" + role +
+                    '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            AbstractTeamContext that = (AbstractTeamContext) o;
+            return role == that.role &&
+                    Objects.equal(color, that.color) &&
+                    Objects.equal(name, that.name);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(name, color, role);
         }
 
     }

@@ -7,11 +7,16 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
+import org.jetbrains.annotations.NotNull;
 import pw.zakharov.amongcraft.api.Arena;
 import pw.zakharov.amongcraft.arena.SingleArena;
-import pw.zakharov.amongcraft.service.*;
+import pw.zakharov.amongcraft.service.ArenaService;
+import pw.zakharov.amongcraft.service.ScoreboardService;
+import pw.zakharov.amongcraft.service.TaskService;
+import pw.zakharov.amongcraft.service.TeamService;
 import pw.zakharov.amongcraft.service.impl.ArenaServiceImpl;
 import pw.zakharov.amongcraft.service.impl.ScoreboardServiceImpl;
+import pw.zakharov.amongcraft.service.impl.TaskServiceImpl;
 import pw.zakharov.amongcraft.service.impl.TeamServiceImpl;
 
 import static pw.zakharov.amongcraft.api.Arena.StopCause.UNKNOWN;
@@ -20,9 +25,10 @@ public final class AmongCraft extends ExtendedJavaPlugin {
 
     private World amongWorld;
 
-    private static TeamService teamService;
-    private static ArenaService arenaService;
-    private static ScoreboardService scoreboardService;
+    private static @NotNull TeamService teamService;
+    private static @NotNull TaskService taskService;
+    private static @NotNull ArenaService arenaService;
+    private static @NotNull ScoreboardService scoreboardService;
 
     @Override
     protected void enable() {
@@ -32,6 +38,7 @@ public final class AmongCraft extends ExtendedJavaPlugin {
         amongWorld = Helper.server().createWorld(wc);
 
         teamService = new TeamServiceImpl(this);
+        taskService = new TaskServiceImpl(this);
         arenaService = new ArenaServiceImpl(this);
         scoreboardService = new ScoreboardServiceImpl(this);
 
@@ -42,6 +49,7 @@ public final class AmongCraft extends ExtendedJavaPlugin {
         Commands.create()
                 .assertPlayer()
                 .handler(context -> {
+                    shuttleArena.enable();
                     shuttleArena.start(5);
                     shuttleArena.randomJoin(context.sender());
                     context.reply("Arena state: " + shuttleArena.getState().name());
@@ -65,15 +73,19 @@ public final class AmongCraft extends ExtendedJavaPlugin {
         });
     }
 
-    public static TeamService getTeamService() {
+    public static @NotNull TeamService getTeamService() {
         return teamService;
     }
 
-    public static ArenaService getArenaService() {
+    public static @NotNull TaskService getTaskService() {
+        return taskService;
+    }
+
+    public static @NotNull ArenaService getArenaService() {
         return arenaService;
     }
 
-    public static ScoreboardService getScoreboardService() {
+    public static @NotNull ScoreboardService getScoreboardService() {
         return scoreboardService;
     }
 

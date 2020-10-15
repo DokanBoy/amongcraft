@@ -54,6 +54,7 @@ public interface Arena {
         ENABLED,
         DISABLED,
         STARTING,
+        STOPPING,
         STARTED,
         ;
     }

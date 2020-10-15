@@ -11,7 +11,7 @@ public interface Task {
 
     @NotNull TaskContext getContext();
 
-    @NotNull Location getStartPosition();
+    @NotNull Location getStartLocation();
 
     @NotNull Location getTaskLocation();
 
@@ -27,6 +27,7 @@ public interface Task {
 
     enum State {
         NOT_COMPLETED,
+        STARTED,
         COMPLETED,
         ;
     }
