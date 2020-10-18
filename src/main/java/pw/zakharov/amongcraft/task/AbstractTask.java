@@ -1,9 +1,8 @@
 package pw.zakharov.amongcraft.task;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.ToString;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import me.lucko.helper.utils.Log;
 import org.bukkit.Location;
 import pw.zakharov.amongcraft.api.Task;
@@ -14,13 +13,14 @@ import pw.zakharov.amongcraft.api.Task;
  */
 @ToString
 @EqualsAndHashCode
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AbstractTask implements Task {
 
-    private @Getter @NonNull State state;
+    @Getter @NonNull @NonFinal State state;
 
-    private final @Getter @NonNull TaskContext context;
-    private final @Getter @NonNull Location startLocation;
-    private final @Getter @NonNull Location taskLocation;
+    @Getter @NonNull TaskContext context;
+    @Getter @NonNull Location startLocation;
+    @Getter @NonNull Location taskLocation;
 
     protected AbstractTask(@NonNull TaskContext context,
                            @NonNull Location startLocation,
@@ -46,9 +46,10 @@ public class AbstractTask implements Task {
 
     @ToString
     @EqualsAndHashCode
+    @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     protected abstract static class AbstractTaskContext implements TaskContext {
 
-        private final @Getter @NonNull String name;
+        @Getter @NonNull String name;
 
         protected AbstractTaskContext(@NonNull String name) {
             this.name = name;

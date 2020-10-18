@@ -41,7 +41,7 @@ import static pw.zakharov.amongcraft.api.Arena.StopCause.UNKNOWN;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SingleArena implements Arena {
 
-    @NonFinal @NonNull State state;
+    @NonNull @NonFinal State state;
 
     @NonNull World world;
     @NonNull ArenaContext context;
@@ -88,7 +88,7 @@ public class SingleArena implements Arena {
         if (state != STARTING && state != ENABLED) return;
 
         setStatus(STARTING);
-        final Set<Team> teams = context.getTeams();
+        Set<Team> teams = context.getTeams();
         for (Team t : teams) {
             final Set<Player> teamPlayers = t.getPlayers();
             for (Player p : teamPlayers) {
@@ -203,7 +203,7 @@ public class SingleArena implements Arena {
                                   @NonNull Location spectatorSpawn,
                                   @NonNull Set<Location> innocentSpawns, int innocents,
                                   @NonNull Set<Location> imposterSpawns, int imposters) {
-            final TeamService teamService = AmongCraft.getTeamService();
+            TeamService teamService = AmongCraft.getTeamService();
             teamService.register(name, new InnocentTeam(innocentSpawns, innocents));
             teamService.register(name, new ImposterTeam(imposterSpawns, imposters));
             teamService.register(name, new SpectatorTeam(spectatorSpawn));

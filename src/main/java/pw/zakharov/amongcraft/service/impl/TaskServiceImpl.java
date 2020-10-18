@@ -1,7 +1,9 @@
 package pw.zakharov.amongcraft.service.impl;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.experimental.FieldDefaults;
 import org.bukkit.plugin.Plugin;
 import pw.zakharov.amongcraft.api.Task;
 import pw.zakharov.amongcraft.service.TaskService;
@@ -14,10 +16,11 @@ import java.util.Set;
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
  * Date: 14.10.2020 17:47
  */
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TaskServiceImpl implements TaskService {
 
-    private final @NonNull Plugin plugin;
-    private final @Getter @NonNull Set<Task> tasks;
+    @NonNull Plugin plugin;
+    @Getter @NonNull Set<Task> tasks;
 
     public TaskServiceImpl(@NonNull Plugin plugin) {
         this.plugin = plugin;

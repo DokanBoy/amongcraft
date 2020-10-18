@@ -1,6 +1,8 @@
 package pw.zakharov.amongcraft.listener;
 
+import lombok.AccessLevel;
 import lombok.NonNull;
+import lombok.experimental.FieldDefaults;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,11 +21,12 @@ import static pw.zakharov.amongcraft.api.Team.Role.IMPOSTER;
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
  * Date: 04.10.2020 20:59
  */
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class PlayerListener implements Listener {
 
-    private final @NonNull Plugin plugin;
-    private final @NonNull ArenaService arenaService;
-    private final @NonNull TeamService teamService;
+    @NonNull Plugin plugin;
+    @NonNull ArenaService arenaService;
+    @NonNull TeamService teamService;
 
     public PlayerListener(@NonNull Plugin plugin,
                           @NonNull ArenaService arenaService,

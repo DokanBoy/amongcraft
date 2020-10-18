@@ -1,6 +1,8 @@
 package pw.zakharov.amongcraft;
 
-import lombok.NonNull;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.experimental.FieldDefaults;
 import me.lucko.helper.Commands;
 import me.lucko.helper.plugin.ExtendedJavaPlugin;
 import pw.zakharov.amongcraft.api.Arena;
@@ -16,12 +18,13 @@ import pw.zakharov.amongcraft.service.impl.TeamServiceImpl;
 
 import static pw.zakharov.amongcraft.api.Arena.StopCause.UNKNOWN;
 
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public final class AmongCraft extends ExtendedJavaPlugin {
 
-    private static TeamService teamService;
-    private static TaskService taskService;
-    private static ArenaService arenaService;
-    private static ScoreboardService scoreboardService;
+    static @Getter TeamService teamService;
+    static @Getter TaskService taskService;
+    static @Getter ArenaService arenaService;
+    static @Getter ScoreboardService scoreboardService;
 
     @Override
     protected void enable() {
@@ -63,22 +66,6 @@ public final class AmongCraft extends ExtendedJavaPlugin {
             arena.stop(UNKNOWN);
             arena.disable();
         });
-    }
-
-    public static @NonNull TeamService getTeamService() {
-        return teamService;
-    }
-
-    public static @NonNull TaskService getTaskService() {
-        return taskService;
-    }
-
-    public static @NonNull ArenaService getArenaService() {
-        return arenaService;
-    }
-
-    public static @NonNull ScoreboardService getScoreboardService() {
-        return scoreboardService;
     }
 
 }

@@ -1,6 +1,8 @@
 package pw.zakharov.amongcraft.service.impl;
 
+import lombok.AccessLevel;
 import lombok.NonNull;
+import lombok.experimental.FieldDefaults;
 import me.lucko.helper.scoreboard.Scoreboard;
 import me.lucko.helper.utils.Log;
 import org.bukkit.plugin.Plugin;
@@ -12,10 +14,11 @@ import java.util.*;
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
  * Date: 04.10.2020 21:29
  */
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ScoreboardServiceImpl implements ScoreboardService {
 
-    private final @NonNull Plugin plugin;
-    private final @NonNull Map<String, Scoreboard> scoreboards;
+    @NonNull Plugin plugin;
+    @NonNull Map<String, Scoreboard> scoreboards;
 
     public ScoreboardServiceImpl(@NonNull Plugin plugin) {
         this.plugin = plugin;

@@ -1,7 +1,9 @@
 package pw.zakharov.amongcraft.service.impl;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.experimental.FieldDefaults;
 import me.lucko.helper.utils.Log;
 import org.bukkit.plugin.Plugin;
 import pw.zakharov.amongcraft.api.Arena;
@@ -15,10 +17,11 @@ import java.util.Set;
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
  * Date: 07.10.2020 23:51
  */
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ArenaServiceImpl implements ArenaService {
 
-    private final @NonNull Plugin plugin;
-    private final @Getter @NonNull Set<Arena> arenas;
+    @NonNull Plugin plugin;
+    @Getter @NonNull Set<Arena> arenas;
 
     public ArenaServiceImpl(@NonNull Plugin plugin) {
         this.plugin = plugin;

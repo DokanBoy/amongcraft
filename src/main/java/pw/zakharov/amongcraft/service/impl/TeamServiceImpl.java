@@ -1,7 +1,9 @@
 package pw.zakharov.amongcraft.service.impl;
 
 import com.google.common.collect.ImmutableSet;
+import lombok.AccessLevel;
 import lombok.NonNull;
+import lombok.experimental.FieldDefaults;
 import me.lucko.helper.utils.Log;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -14,10 +16,11 @@ import java.util.*;
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
  * Date: 06.10.2020 22:02
  */
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TeamServiceImpl implements TeamService {
 
-    private final @NonNull Plugin plugin;
-    private final @NonNull Map<String, Set<Team>> teamArenaMap;
+    @NonNull Plugin plugin;
+    @NonNull Map<String, Set<Team>> teamArenaMap;
 
     public TeamServiceImpl(@NonNull Plugin plugin) {
         this.plugin = plugin;
