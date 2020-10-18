@@ -1,8 +1,9 @@
 package pw.zakharov.amongcraft.service.impl;
 
+import lombok.Getter;
+import lombok.NonNull;
 import me.lucko.helper.utils.Log;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 import pw.zakharov.amongcraft.api.Arena;
 import pw.zakharov.amongcraft.service.ArenaService;
 
@@ -16,16 +17,16 @@ import java.util.Set;
  */
 public class ArenaServiceImpl implements ArenaService {
 
-    private final @NotNull Plugin plugin;
-    private final @NotNull Set<Arena> arenas;
+    private final @NonNull Plugin plugin;
+    private final @Getter @NonNull Set<Arena> arenas;
 
-    public ArenaServiceImpl(@NotNull Plugin plugin) {
+    public ArenaServiceImpl(@NonNull Plugin plugin) {
         this.plugin = plugin;
         this.arenas = new LinkedHashSet<>();
     }
 
     @Override
-    public void register(@NotNull Arena arena) {
+    public void register(@NonNull Arena arena) {
         if (arenas.stream().anyMatch(a -> a.getContext().getName().equals(arena.getContext().getName()))) {
             Log.warn("Arena with name " + arena.getContext().getName() + " already register!");
             return;
@@ -35,7 +36,7 @@ public class ArenaServiceImpl implements ArenaService {
     }
 
     @Override
-    public void unregister(@NotNull String name) {
+    public void unregister(@NonNull String name) {
         Optional<Arena> arena = arenas.stream()
                 .filter(a -> a.getContext().getName().equals(name))
                 .findFirst();
@@ -48,13 +49,8 @@ public class ArenaServiceImpl implements ArenaService {
     }
 
     @Override
-    public Optional<Arena> getArena(@NotNull String name) {
+    public Optional<Arena> getArena(@NonNull String name) {
         return arenas.stream().filter(a -> a.getContext().getName().equals(name)).findFirst();
-    }
-
-    @Override
-    public @NotNull Set<Arena> getArenas() {
-        return arenas;
     }
 
 }

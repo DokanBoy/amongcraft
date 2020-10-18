@@ -1,10 +1,10 @@
 package pw.zakharov.amongcraft.service.impl;
 
+import com.google.common.collect.ImmutableSet;
+import lombok.NonNull;
 import me.lucko.helper.utils.Log;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
-import pw.zakharov.amongcraft.api.Arena;
 import pw.zakharov.amongcraft.api.Team;
 import pw.zakharov.amongcraft.service.TeamService;
 
@@ -16,45 +16,53 @@ import java.util.*;
  */
 public class TeamServiceImpl implements TeamService {
 
-    private final @NotNull Plugin plugin;
-    private final @NotNull Set<Team> teams;
-    private final @NotNull Map<Arena, Set<Team>> teamArenaMap;
+    private final @NonNull Plugin plugin;
+    private final @NonNull Map<String, Set<Team>> teamArenaMap;
 
-    public TeamServiceImpl(@NotNull Plugin plugin) {
+    public TeamServiceImpl(@NonNull Plugin plugin) {
         this.plugin = plugin;
-        this.teams = new LinkedHashSet<>();
         this.teamArenaMap = new LinkedHashMap<>();
     }
 
     @Override
-    public void register(@NotNull Team team) {
-        if (teams.stream().anyMatch(t -> t.getContext().getName().equals(team.getContext().getName()))) {
-            Log.warn("Team with name " + team.getContext().getName() + " already register!");
-            return;
+    public void register(@NonNull String arenaName, @NonNull Team team) {
+        if (teamArenaMap.containsKey(arenaName)) {
+            Set<Team> storedTeams = teamArenaMap.get(arenaName);
+            if (storedTeams.stream().anyMatch(t -> t.getContext().getName().equals(team.getContext().getName()))) {
+                Log.warn("Team with name " + team.getContext().getName() + " already register!");
+                return;
+            }
+            storedTeams.add(team);
+        } else {
+            teamArenaMap.put(arenaName, ImmutableSet.of(team));
+            Log.warn("Team with name " + team.getContext().getName() + " successfully registered!");
         }
-        teams.add(team);
     }
 
     @Override
-    public void unregister(@NotNull String name) {
-        teams.removeIf(team -> team.getContext().getName().equals(name));
+    public void unregister(@NonNull String arenaName, @NonNull String teamName) {
+        teamArenaMap.get(arenaName).removeIf(team -> team.getContext().getName().equals(teamName));
     }
 
     @Override
-    public Optional<Team> getTeam(@NotNull String name) {
-        return teams.stream().filter(team -> team.getContext().getName().equals(name)).findFirst();
+    public Optional<Team> getTeam(@NonNull String arenaName, @NonNull String teamName) {
+        return teamArenaMap.get(arenaName).stream().filter(team -> team.getContext().getName().equals(teamName)).findFirst();
     }
 
     @Override
-    public Optional<Team> getPlayerTeam(@NotNull Player player) {
-        return teams.stream()
-                .filter(team -> team.getPlayers().contains(player))
-                .findFirst();
+    public Optional<Team> getPlayerTeam(@NonNull Player player) {
+        Collection<Set<Team>> storedTeams = teamArenaMap.values();
+        for (Set<Team> teams : storedTeams) {
+            for (Team team : teams) {
+                if (team.getPlayers().contains(player)) return Optional.of(team);
+            }
+        }
+        return Optional.empty();
     }
 
     @Override
-    public @NotNull Set<Team> getTeams() {
-        return teams;
+    public @NonNull Set<Team> getArenaTeams(@NonNull String arenaName) {
+        return teamArenaMap.get(arenaName);
     }
 
 }

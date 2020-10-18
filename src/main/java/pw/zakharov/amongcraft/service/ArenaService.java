@@ -1,6 +1,6 @@
 package pw.zakharov.amongcraft.service;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import pw.zakharov.amongcraft.api.Arena;
 
 import java.util.Optional;
@@ -12,12 +12,12 @@ import java.util.Set;
  */
 public interface ArenaService {
 
-    void register(@NotNull Arena arena);
+    void register(@NonNull Arena arena);
 
-    void unregister(@NotNull String name);
+    void unregister(@NonNull String name);
 
-    Optional<Arena> getArena(@NotNull String name);
+    Optional<Arena> getArena(@NonNull String name);
 
-    @NotNull Set<Arena> getArenas();
+    @NonNull Set<Arena> getArenas();
 
 }

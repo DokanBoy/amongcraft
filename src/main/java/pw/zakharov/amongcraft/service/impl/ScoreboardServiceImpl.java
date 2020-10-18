@@ -1,9 +1,9 @@
 package pw.zakharov.amongcraft.service.impl;
 
+import lombok.NonNull;
 import me.lucko.helper.scoreboard.Scoreboard;
 import me.lucko.helper.utils.Log;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 import pw.zakharov.amongcraft.service.ScoreboardService;
 
 import java.util.*;
@@ -14,16 +14,16 @@ import java.util.*;
  */
 public class ScoreboardServiceImpl implements ScoreboardService {
 
-    private final @NotNull Plugin plugin;
-    private final @NotNull Map<String, Scoreboard> scoreboards;
+    private final @NonNull Plugin plugin;
+    private final @NonNull Map<String, Scoreboard> scoreboards;
 
-    public ScoreboardServiceImpl(@NotNull Plugin plugin) {
+    public ScoreboardServiceImpl(@NonNull Plugin plugin) {
         this.plugin = plugin;
         this.scoreboards = new HashMap<>();
     }
 
     @Override
-    public void register(@NotNull String id, @NotNull Scoreboard scoreboard) {
+    public void register(@NonNull String id, @NonNull Scoreboard scoreboard) {
         if (scoreboards.containsKey(id)) {
             Log.warn("Scoreboard with ID " + id + " already register!");
             return;
@@ -32,17 +32,17 @@ public class ScoreboardServiceImpl implements ScoreboardService {
     }
 
     @Override
-    public void unregister(@NotNull String id) {
+    public void unregister(@NonNull String id) {
         scoreboards.remove(id);
     }
 
     @Override
-    public Optional<Scoreboard> getScoreboard(@NotNull String id) {
+    public Optional<Scoreboard> getScoreboard(@NonNull String id) {
         return Optional.ofNullable(scoreboards.get(id));
     }
 
     @Override
-    public @NotNull Set<Scoreboard> getScoreboards() {
+    public @NonNull Set<Scoreboard> getScoreboards() {
         return new HashSet<>(scoreboards.values());
     }
 

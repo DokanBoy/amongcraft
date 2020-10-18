@@ -1,11 +1,11 @@
 package pw.zakharov.amongcraft.team;
 
+import lombok.NonNull;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.Set;
+import java.util.Collections;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
@@ -13,19 +13,19 @@ import java.util.Set;
  */
 public class SpectatorTeam extends AbstractTeam {
 
-    public SpectatorTeam(@NotNull Set<Location> spawns) {
-        super(new SpectatorTeamContext("Наблюдатель"), spawns, 999);
+    public SpectatorTeam(@NonNull Location spawn) {
+        super(new SpectatorTeamContext("Наблюдатель"), Collections.singleton(spawn), 999);
     }
 
     @Override
-    public boolean join(@NotNull Player player) {
+    public boolean join(@NonNull Player player) {
         getPlayers().add(player);
         return true;
     }
 
     private static class SpectatorTeamContext extends AbstractTeamContext {
 
-        private SpectatorTeamContext(@NotNull String name) {
+        private SpectatorTeamContext(@NonNull String name) {
             super(name, Color.GRAY, Role.SPECTATOR);
         }
 

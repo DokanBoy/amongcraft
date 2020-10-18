@@ -1,11 +1,9 @@
 package pw.zakharov.amongcraft.api;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import pw.zakharov.amongcraft.arena.loader.ArenaLoaderImpl;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Optional;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
@@ -13,10 +11,10 @@ import java.util.Optional;
  */
 public interface ArenaLoader {
 
-    static ArenaLoader createLoader(@NotNull Path dir, @NotNull String name) {
+    static ArenaLoader createLoader(@NonNull Path dir, @NonNull String name) {
         return new ArenaLoaderImpl(dir, name);
     }
 
-    @NotNull Arena getArena();
+    @NonNull Arena getArena();
 
 }

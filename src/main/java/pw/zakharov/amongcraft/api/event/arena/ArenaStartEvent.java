@@ -1,8 +1,8 @@
 package pw.zakharov.amongcraft.api.event.arena;
 
+import lombok.NonNull;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 import pw.zakharov.amongcraft.api.Arena;
 
 /**
@@ -13,9 +13,9 @@ public class ArenaStartEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
-    private final @NotNull Arena arena;
+    private final @NonNull Arena arena;
 
-    public ArenaStartEvent(@NotNull Arena arena) {
+    public ArenaStartEvent(@NonNull Arena arena) {
         this.arena = arena;
     }
 
@@ -27,7 +27,7 @@ public class ArenaStartEvent extends Event {
         return HANDLERS;
     }
 
-    public @NotNull Arena getArena() {
+    public @NonNull Arena getArena() {
         return arena;
     }
 

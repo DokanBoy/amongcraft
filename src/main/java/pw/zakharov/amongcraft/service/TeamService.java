@@ -1,7 +1,7 @@
 package pw.zakharov.amongcraft.service;
 
+import lombok.NonNull;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 import pw.zakharov.amongcraft.api.Team;
 
 import java.util.Optional;
@@ -13,14 +13,14 @@ import java.util.Set;
  */
 public interface TeamService {
 
-    void register(@NotNull Team team);
+    void register(@NonNull String arenaName, @NonNull Team team);
 
-    void unregister(@NotNull String name);
+    void unregister(@NonNull String arenaName, @NonNull String teamName);
 
-    Optional<Team> getTeam(@NotNull String name);
+    Optional<Team> getTeam(@NonNull String arenaName, @NonNull String teamName);
 
-    Optional<Team> getPlayerTeam(@NotNull Player player);
+    Optional<Team> getPlayerTeam(@NonNull Player player);
 
-    @NotNull Set<Team> getTeams();
+    @NonNull Set<Team> getArenaTeams(@NonNull String arenaName);
 
 }

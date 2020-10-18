@@ -1,6 +1,6 @@
 package pw.zakharov.amongcraft.service;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 import pw.zakharov.amongcraft.api.Task;
 
 import java.util.Optional;
@@ -12,12 +12,12 @@ import java.util.Set;
  */
 public interface TaskService {
 
-    void register(@NotNull Task task);
+    void register(@NonNull Task task);
 
-    void unregister(@NotNull String name);
+    void unregister(@NonNull String name);
 
-    Optional<Task> getTask(@NotNull String name);
+    Optional<Task> getTask(@NonNull String name);
 
-    @NotNull Set<Task> getTasks();
+    @NonNull Set<Task> getTasks();
 
 }

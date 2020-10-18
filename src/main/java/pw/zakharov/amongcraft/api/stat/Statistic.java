@@ -1,6 +1,6 @@
 package pw.zakharov.amongcraft.api.stat;
 
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
@@ -8,11 +8,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Statistic<V> {
 
-    @NotNull String getName();
+    @NonNull String getName();
 
-    @NotNull Type getType();
+    @NonNull Type getType();
 
-    @NotNull V getValue();
+    @NonNull V getValue();
 
     enum Type {
         KILL_INNOCENT,

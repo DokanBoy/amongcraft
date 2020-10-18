@@ -1,9 +1,9 @@
 package pw.zakharov.amongcraft.listener;
 
+import lombok.NonNull;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 import pw.zakharov.amongcraft.api.event.arena.ArenaStartEvent;
 import pw.zakharov.amongcraft.api.event.arena.ArenaStopEvent;
 import pw.zakharov.amongcraft.service.ArenaService;
@@ -14,11 +14,11 @@ import pw.zakharov.amongcraft.service.ArenaService;
  */
 public class ArenaListener implements Listener {
 
-    private final @NotNull Plugin plugin;
-    private final @NotNull ArenaService arenaService;
+    private final @NonNull Plugin plugin;
+    private final @NonNull ArenaService arenaService;
 
-    public ArenaListener(@NotNull Plugin plugin,
-                         @NotNull ArenaService arenaService) {
+    public ArenaListener(@NonNull Plugin plugin,
+                         @NonNull ArenaService arenaService) {
         this.plugin = plugin;
         this.arenaService = arenaService;
     }

@@ -1,8 +1,8 @@
 package pw.zakharov.amongcraft.api.event.arena;
 
+import lombok.NonNull;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.jetbrains.annotations.NotNull;
 import pw.zakharov.amongcraft.api.Arena;
 
 /**
@@ -13,10 +13,10 @@ public class ArenaStopEvent extends Event {
 
     private static final HandlerList HANDLERS = new HandlerList();
 
-    private final @NotNull Arena arena;
-    private final @NotNull Arena.StopCause cause;
+    private final @NonNull Arena arena;
+    private final @NonNull Arena.StopCause cause;
 
-    public ArenaStopEvent(@NotNull Arena arena, @NotNull Arena.StopCause cause) {
+    public ArenaStopEvent(@NonNull Arena arena, @NonNull Arena.StopCause cause) {
         this.arena = arena;
         this.cause = cause;
     }
@@ -29,11 +29,11 @@ public class ArenaStopEvent extends Event {
         return HANDLERS;
     }
 
-    public @NotNull Arena getArena() {
+    public @NonNull Arena getArena() {
         return arena;
     }
 
-    public Arena.@NotNull StopCause getCause() {
+    public @NonNull Arena.StopCause getCause() {
         return cause;
     }
 

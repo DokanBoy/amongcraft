@@ -1,8 +1,8 @@
 package pw.zakharov.amongcraft.api;
 
+import lombok.NonNull;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
@@ -20,31 +20,31 @@ public interface Arena {
 
     void start(int afterSec);
 
-    void stop(@NotNull StopCause cause);
+    void stop(@NonNull StopCause cause);
 
-    void stop(@NotNull StopCause cause, int afterSec);
+    void stop(@NonNull StopCause cause, int afterSec);
 
-    void randomJoin(@NotNull Player player);
+    void randomJoin(@NonNull Player player);
 
-    void join(@NotNull Player player, @NotNull Team team);
+    void join(@NonNull Player player, @NonNull Team team);
 
-    @NotNull ArenaContext getContext();
+    @NonNull ArenaContext getContext();
 
-    @NotNull State getState();
+    @NonNull State getState();
 
     interface ArenaContext {
 
-        @NotNull String getName();
+        @NonNull String getName();
 
         default int getTeamsAmount() {
             return getTeams().size();
         }
 
-        @NotNull Set<Team> getTeams();
+        @NonNull Set<Team> getTeams();
 
-        @NotNull Set<Player> getPlayers();
+        @NonNull Set<Player> getPlayers();
 
-        @NotNull Location getLobby();
+        @NonNull Location getLobby();
 
     }
 

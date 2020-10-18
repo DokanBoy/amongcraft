@@ -1,9 +1,9 @@
 package pw.zakharov.amongcraft.api;
 
+import lombok.NonNull;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
@@ -29,7 +29,7 @@ public interface Team {
      * @param player игрок, которого хотим запихнуть в команду
      * @return можем ли добавить игрока в команду
      */
-    default boolean join(@NotNull Player player) {
+    default boolean join(@NonNull Player player) {
         if (getMaxSize() > getSize() || player.hasPermission("among.admin")) {
             getPlayers().add(player);
             return true;
@@ -40,31 +40,31 @@ public interface Team {
     /**
      * @param player игрок которого нужно выгнать из команды
      */
-    default void leave(@NotNull Player player) {
+    default void leave(@NonNull Player player) {
         getPlayers().remove(player);
     }
 
     /**
      * @return все точки спавна команду
      */
-    @NotNull Set<Location> getSpawns();
+    @NonNull Set<Location> getSpawns();
 
     /**
      * Итератор цикличный
      *
      * @return следующий спавн этой команды.
      */
-    @NotNull Location getNextSpawn();
+    @NonNull Location getNextSpawn();
 
     /**
      * @return список всех игроков в команде
      */
-    @NotNull Set<Player> getPlayers();
+    @NonNull Set<Player> getPlayers();
 
     /**
      * @return контекст арены
      */
-    @NotNull TeamContext getContext();
+    @NonNull TeamContext getContext();
 
     /**
      * Контекст арены
@@ -74,17 +74,17 @@ public interface Team {
         /**
          * @return название команды
          */
-        @NotNull String getName();
+        @NonNull String getName();
 
         /**
          * @return цвет команды
          */
-        @NotNull Color getColor();
+        @NonNull Color getColor();
 
         /**
          * @return роль команды
          */
-        @NotNull Role getRole();
+        @NonNull Role getRole();
     }
 
     /**

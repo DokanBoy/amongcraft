@@ -1,7 +1,7 @@
 package pw.zakharov.amongcraft.service;
 
+import lombok.NonNull;
 import me.lucko.helper.scoreboard.Scoreboard;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
 import java.util.Set;
@@ -12,12 +12,12 @@ import java.util.Set;
  */
 public interface ScoreboardService {
 
-    void register(@NotNull String id, @NotNull Scoreboard scoreboard);
+    void register(@NonNull String id, @NonNull Scoreboard scoreboard);
 
-    void unregister(@NotNull String id);
+    void unregister(@NonNull String id);
 
-    Optional<Scoreboard> getScoreboard(@NotNull String id);
+    Optional<Scoreboard> getScoreboard(@NonNull String id);
 
-    @NotNull Set<Scoreboard> getScoreboards();
+    @NonNull Set<Scoreboard> getScoreboards();
 
 }

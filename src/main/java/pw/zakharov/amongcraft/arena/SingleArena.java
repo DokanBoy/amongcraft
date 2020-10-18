@@ -1,6 +1,8 @@
 package pw.zakharov.amongcraft.arena;
 
-import com.google.common.collect.ImmutableSet;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
 import me.lucko.helper.Events;
 import me.lucko.helper.Helper;
 import me.lucko.helper.Schedulers;
@@ -12,7 +14,6 @@ import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 import pw.zakharov.amongcraft.AmongCraft;
 import pw.zakharov.amongcraft.api.Arena;
 import pw.zakharov.amongcraft.api.Team;
@@ -35,19 +36,20 @@ import static pw.zakharov.amongcraft.api.Arena.StopCause.UNKNOWN;
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
  * Date: 04.10.2020 18:48
  */
+@ToString
+@EqualsAndHashCode
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SingleArena implements Arena {
 
-    private @NotNull State state;
+    @NonFinal @NonNull State state;
 
-    private final @NotNull World world;
-    private final @NotNull ArenaContext context;
+    @NonNull World world;
+    @NonNull ArenaContext context;
 
-    public SingleArena(@NotNull String arenaName,
-                       @NotNull World world,
-                       @NotNull Location lobbyLocation) {
+    public SingleArena(@NonNull World world, @NonNull SingleArenaContext context) {
         this.world = world;
+        this.context = context;
         this.state = DISABLED;
-        this.context = new SingleArenaContext(arenaName, lobbyLocation);
 
         Log.info("Created arena: " + toString());
         enable();
@@ -113,7 +115,7 @@ public class SingleArena implements Arena {
     }
 
     @Override
-    public void stop(@NotNull StopCause cause) {
+    public void stop(@NonNull StopCause cause) {
         if (state == ENABLED || state == DISABLED) return;
 
         setStatus(ENABLED);
@@ -122,7 +124,7 @@ public class SingleArena implements Arena {
     }
 
     @Override
-    public void stop(@NotNull StopCause cause, int afterSec) {
+    public void stop(@NonNull StopCause cause, int afterSec) {
         if (state != STARTED) return;
 
         setStatus(STOPPING);
@@ -134,28 +136,28 @@ public class SingleArena implements Arena {
     }
 
     @Override
-    public @NotNull ArenaContext getContext() {
+    public @NonNull ArenaContext getContext() {
         return context;
     }
 
-    private void setStatus(@NotNull State state) {
+    private void setStatus(@NonNull State state) {
         this.state = state;
     }
 
     @Override
-    public @NotNull State getState() {
+    public @NonNull State getState() {
         return state;
     }
 
     @Override
-    public void randomJoin(@NotNull Player player) {
+    public void randomJoin(@NonNull Player player) {
         // todo : максимальное количество импостеров и спектаторов нельзя пикать
-        @NotNull Team team = RandomSelector.uniform(context.getTeams()).pick();
+        Team team = RandomSelector.uniform(context.getTeams()).pick();
         join(player, team);
     }
 
     @Override
-    public void join(@NotNull Player player, @NotNull Team team) {
+    public void join(@NonNull Player player, @NonNull Team team) {
         if (state == DISABLED) {
             Log.warn("Arena " + context.getName() + " is disabled. Enable before join!" + "");
             return;
@@ -187,61 +189,36 @@ public class SingleArena implements Arena {
         Log.info("Player " + player.getName() + " joined to " + team.getContext().getName());
     }
 
-    @Override
-    public String toString() {
-        return "SingleArena{" +
-                "context=" + context +
-                ", world=" + world +
-                ", status=" + state +
-                '}';
-    }
-
+    @ToString
+    @EqualsAndHashCode
+    @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     public static class SingleArenaContext implements ArenaContext {
 
-        private final @NotNull String arenaName;
-        private final @NotNull Location lobbyLocation;
-        private final @NotNull Set<Team> teams;
+         @Getter @NonNull String name;
+         @Getter @NonNull Location lobby;
+         @Getter @NonNull Set<Team> teams;
 
-        public SingleArenaContext(@NotNull String arenaName, @NotNull Location lobbyLocation) {
+        public SingleArenaContext(@NonNull String name,
+                                  @NonNull Location lobby,
+                                  @NonNull Location spectatorSpawn,
+                                  @NonNull Set<Location> innocentSpawns, int innocents,
+                                  @NonNull Set<Location> imposterSpawns, int imposters) {
             final TeamService teamService = AmongCraft.getTeamService();
-            teamService.register(new ImposterTeam(ImmutableSet.of(lobbyLocation.add(10, 0, 10)), 2));
-            teamService.register(new InnocentTeam(ImmutableSet.of(lobbyLocation.add(15, 0, 15)), 2));
-            teamService.register(new SpectatorTeam(ImmutableSet.of(lobbyLocation.add(20, 0, 20))));
+            teamService.register(name, new InnocentTeam(innocentSpawns, innocents));
+            teamService.register(name, new ImposterTeam(imposterSpawns, imposters));
+            teamService.register(name, new SpectatorTeam(spectatorSpawn));
 
-            this.arenaName = arenaName;
-            this.teams = teamService.getTeams();
-            this.lobbyLocation = lobbyLocation;
+
+            this.name = name;
+            this.lobby = lobby;
+            this.teams = teamService.getArenaTeams(name);
         }
 
         @Override
-        public @NotNull String getName() {
-            return arenaName;
-        }
-
-        @Override
-        public @NotNull Set<Team> getTeams() {
-            return teams;
-        }
-
-        @Override
-        public @NotNull Set<Player> getPlayers() {
+        public @NonNull Set<Player> getPlayers() {
             Set<Player> players = new LinkedHashSet<>();
             teams.forEach(team -> players.addAll(team.getPlayers()));
             return players;
-        }
-
-        @Override
-        public @NotNull Location getLobby() {
-            return lobbyLocation;
-        }
-
-        @Override
-        public String toString() {
-            return "SingleArenaContext{" +
-                    "arenaName='" + arenaName +
-                    ", lobbyLocation=" + lobbyLocation +
-                    ", teams=" + teams +
-                    '}';
         }
 
     }

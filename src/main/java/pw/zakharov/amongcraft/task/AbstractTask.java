@@ -1,26 +1,30 @@
 package pw.zakharov.amongcraft.task;
 
-import com.google.common.base.Objects;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.ToString;
 import me.lucko.helper.utils.Log;
 import org.bukkit.Location;
-import org.jetbrains.annotations.NotNull;
 import pw.zakharov.amongcraft.api.Task;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
  * Date: 15.10.2020 19:52
  */
+@ToString
+@EqualsAndHashCode
 public class AbstractTask implements Task {
 
-    private final @NotNull TaskContext context;
-    private final @NotNull Location startLocation;
-    private final @NotNull Location taskLocation;
+    private @Getter @NonNull State state;
 
-    private @NotNull State state;
+    private final @Getter @NonNull TaskContext context;
+    private final @Getter @NonNull Location startLocation;
+    private final @Getter @NonNull Location taskLocation;
 
-    protected AbstractTask(@NotNull TaskContext context,
-                           @NotNull Location startLocation,
-                           @NotNull Location taskLocation) {
+    protected AbstractTask(@NonNull TaskContext context,
+                           @NonNull Location startLocation,
+                           @NonNull Location taskLocation) {
         this.context = context;
         this.startLocation = startLocation;
         this.taskLocation = taskLocation;
@@ -28,26 +32,6 @@ public class AbstractTask implements Task {
         this.state = State.NOT_COMPLETED;
 
         Log.info("Task created: " + toString());
-    }
-
-    @Override
-    public @NotNull TaskContext getContext() {
-        return context;
-    }
-
-    @Override
-    public @NotNull Location getStartLocation() {
-        return startLocation;
-    }
-
-    @Override
-    public @NotNull Location getTaskLocation() {
-        return taskLocation;
-    }
-
-    @Override
-    public @NotNull State getState() {
-        return state;
     }
 
     @Override
@@ -60,62 +44,14 @@ public class AbstractTask implements Task {
         this.state = State.COMPLETED;
     }
 
-    @Override
-    public String toString() {
-        return getClass().getName() + "{" +
-                "context=" + context +
-                ", startPosition=" + startLocation +
-                ", taskLocation=" + taskLocation +
-                ", state=" + state +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AbstractTask that = (AbstractTask) o;
-        return Objects.equal(context, that.context) &&
-                Objects.equal(startLocation, that.startLocation) &&
-                Objects.equal(taskLocation, that.taskLocation);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(context, startLocation, taskLocation, state);
-    }
-
+    @ToString
+    @EqualsAndHashCode
     protected abstract static class AbstractTaskContext implements TaskContext {
 
-        private final @NotNull String name;
+        private final @Getter @NonNull String name;
 
-        protected AbstractTaskContext(@NotNull String name) {
+        protected AbstractTaskContext(@NonNull String name) {
             this.name = name;
-        }
-
-        @Override
-        public @NotNull String getName() {
-            return name;
-        }
-
-        @Override
-        public String toString() {
-            return getClass().getName() + "{" +
-                    "name='" + name + '\'' +
-                    '}';
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            AbstractTaskContext that = (AbstractTaskContext) o;
-            return Objects.equal(name, that.name);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hashCode(name);
         }
 
     }

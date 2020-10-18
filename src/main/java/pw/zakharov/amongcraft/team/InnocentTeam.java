@@ -1,8 +1,8 @@
 package pw.zakharov.amongcraft.team;
 
+import lombok.NonNull;
 import org.bukkit.Color;
 import org.bukkit.Location;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
@@ -12,13 +12,13 @@ import java.util.Set;
  */
 public class InnocentTeam extends AbstractTeam {
 
-    public InnocentTeam(@NotNull Set<Location> spawns, int maxSize) {
+    public InnocentTeam(@NonNull Set<Location> spawns, int maxSize) {
         super(new InnocentTeamContext("Мирный"), spawns, maxSize);
     }
 
     private static class InnocentTeamContext extends AbstractTeamContext {
 
-        private InnocentTeamContext(@NotNull String name) {
+        private InnocentTeamContext(@NonNull String name) {
             super(name, Color.GREEN, Role.INNOCENT);
         }
 

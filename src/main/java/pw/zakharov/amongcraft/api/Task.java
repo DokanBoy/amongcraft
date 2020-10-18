@@ -1,7 +1,7 @@
 package pw.zakharov.amongcraft.api;
 
+import lombok.NonNull;
 import org.bukkit.Location;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
@@ -9,20 +9,20 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Task {
 
-    @NotNull TaskContext getContext();
+    @NonNull TaskContext getContext();
 
-    @NotNull Location getStartLocation();
+    @NonNull Location getStartLocation();
 
-    @NotNull Location getTaskLocation();
+    @NonNull Location getTaskLocation();
 
-    @NotNull State getState();
+    @NonNull State getState();
 
     void start();
 
     void complete();
 
     interface TaskContext {
-        @NotNull String getName();
+        @NonNull String getName();
     }
 
     enum State {

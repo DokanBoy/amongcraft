@@ -16,10 +16,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <bukkit.version>1.12.2-R0.1-SNAPSHOT</bukkit.version>
-        <helper.version>5.6.5</helper.version>
+        <helper.version>5.6.6</helper.version>
         <hicari.version>3.4.5</hicari.version>
         <jetbrains-annotations.version>20.1.0</jetbrains-annotations.version>
         <guava.version>29.0-jre</guava.version>
+        <lombok.version>1.18.16</lombok.version>
     </properties>
     <url>zakharov.pw</url>
 
@@ -62,6 +63,10 @@
 
     <repositories>
         <repository>
+            <id>luck-repo</id>
+            <url>https://repo.lucko.me/</url>
+        </repository>
+        <repository>
             <id>papermc-repo</id>
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
@@ -91,14 +96,15 @@
 
         <!-- Utils -->
         <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>${jetbrains-annotations.version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

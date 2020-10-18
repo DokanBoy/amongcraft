@@ -1,8 +1,8 @@
 package pw.zakharov.amongcraft;
 
+import lombok.NonNull;
 import me.lucko.helper.Commands;
 import me.lucko.helper.plugin.ExtendedJavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import pw.zakharov.amongcraft.api.Arena;
 import pw.zakharov.amongcraft.api.ArenaLoader;
 import pw.zakharov.amongcraft.service.ArenaService;
@@ -65,19 +65,19 @@ public final class AmongCraft extends ExtendedJavaPlugin {
         });
     }
 
-    public static @NotNull TeamService getTeamService() {
+    public static @NonNull TeamService getTeamService() {
         return teamService;
     }
 
-    public static @NotNull TaskService getTaskService() {
+    public static @NonNull TaskService getTaskService() {
         return taskService;
     }
 
-    public static @NotNull ArenaService getArenaService() {
+    public static @NonNull ArenaService getArenaService() {
         return arenaService;
     }
 
-    public static @NotNull ScoreboardService getScoreboardService() {
+    public static @NonNull ScoreboardService getScoreboardService() {
         return scoreboardService;
     }
 

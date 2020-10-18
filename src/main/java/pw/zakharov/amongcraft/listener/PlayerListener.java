@@ -1,5 +1,6 @@
 package pw.zakharov.amongcraft.listener;
 
+import lombok.NonNull;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -8,7 +9,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
-import org.jetbrains.annotations.NotNull;
 import pw.zakharov.amongcraft.service.ArenaService;
 import pw.zakharov.amongcraft.service.TeamService;
 import pw.zakharov.amongcraft.util.ArmorStandUtils;
@@ -21,13 +21,13 @@ import static pw.zakharov.amongcraft.api.Team.Role.IMPOSTER;
  */
 public class PlayerListener implements Listener {
 
-    private final @NotNull Plugin plugin;
-    private final @NotNull ArenaService arenaService;
-    private final @NotNull TeamService teamService;
+    private final @NonNull Plugin plugin;
+    private final @NonNull ArenaService arenaService;
+    private final @NonNull TeamService teamService;
 
-    public PlayerListener(@NotNull Plugin plugin,
-                          @NotNull ArenaService arenaService,
-                          @NotNull TeamService teamService) {
+    public PlayerListener(@NonNull Plugin plugin,
+                          @NonNull ArenaService arenaService,
+                          @NonNull TeamService teamService) {
         this.plugin = plugin;
         this.arenaService = arenaService;
         this.teamService = teamService;

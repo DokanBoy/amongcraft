@@ -1,7 +1,7 @@
 package pw.zakharov.amongcraft.util;
 
+import lombok.NonNull;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
@@ -13,7 +13,7 @@ public final class ArmorStandUtils {
         throw new UnsupportedOperationException("This class cannot be instantiated");
     }
 
-    public static void throwSword(@NotNull Player player, int distance) {
+    public static void throwSword(@NonNull Player player, int distance) {
         player.sendMessage("You throw sword for " + distance + " blocks");
     }
 

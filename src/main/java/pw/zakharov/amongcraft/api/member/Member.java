@@ -1,8 +1,8 @@
 package pw.zakharov.amongcraft.api.member;
 
-import org.jetbrains.annotations.NotNull;
-import pw.zakharov.amongcraft.api.stat.Statistic;
+import lombok.NonNull;
 import pw.zakharov.amongcraft.api.Task;
+import pw.zakharov.amongcraft.api.stat.Statistic;
 
 import java.util.Set;
 import java.util.UUID;
@@ -13,13 +13,13 @@ import java.util.UUID;
  */
 public interface Member {
 
-    @NotNull UUID getId();
+    @NonNull UUID getId();
 
-    @NotNull Set<Statistic<?>> getStats();
+    @NonNull Set<Statistic<?>> getStats();
 
-    @NotNull Set<Task> getTasks();
+    @NonNull Set<Task> getTasks();
 
-    default @NotNull Statistic<?> findStatByType(Statistic.Type type) {
+    default @NonNull Statistic<?> findStatByType(Statistic.Type type) {
         return getStats()
                 .stream()
                 .filter(stat -> stat.getType() == type)

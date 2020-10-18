@@ -1,108 +1,52 @@
 package pw.zakharov.amongcraft.data;
 
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 import me.lucko.helper.config.objectmapping.Setting;
 import me.lucko.helper.config.objectmapping.serialize.ConfigSerializable;
-import me.lucko.helper.serialize.Position;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.Location;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
  * Date: 15.10.2020 22:42
  */
+@Data
+@FieldDefaults(level = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@AllArgsConstructor
 @ConfigSerializable
 public class ArenaData {
 
-    public ArenaData() {
-
-    }
-
-    public ArenaData(@NotNull String name, @NotNull String worldName,
-                     int imposterAmount, int swordCooldown,
-                     @NotNull Position lobbyPosition, @NotNull List<Position> innocentPositions,
-                     @NotNull List<Position> imposterPositions, @NotNull List<Position> spectatorPositions) {
-        this.name = name;
-        this.worldName = worldName;
-        this.imposterAmount = imposterAmount;
-        this.swordCooldown = swordCooldown;
-        this.lobbyPosition = lobbyPosition;
-        this.innocentPositions = innocentPositions;
-        this.imposterPositions = imposterPositions;
-        this.spectatorPositions = spectatorPositions;
-    }
-
     /* Arena info */
     @Setting(value = "arena-name")
-    private String name;
+    @NonNull String name;
 
     @Setting(value = "world-name")
-    private String worldName;
+    @NonNull String worldName;
 
-    /* Imposter settings */
+    /* Team settings */
     @Setting(value = "team-imposter-size")
-    private int imposterAmount;
+    int imposterAmount;
 
     @Setting(value = "team-imposter-sword-cooldown")
-    private int swordCooldown;
+    int swordCooldown;
 
-    /* Positions */
-    @Setting(value = "position-lobby")
-    private Position lobbyPosition;
+    @Setting(value = "team-innocent-size")
+    int innocentAmount;
 
-    @Setting(value = "position-innocent")
-    private List<Position> innocentPositions;
+    /* Locations */
+    @Setting(value = "location-lobby")
+    @NonNull Location lobbyLocation;
 
-    @Setting(value = "position-imposter")
-    private List<Position> imposterPositions;
+    @Setting(value = "location-spectator")
+    @NonNull Location spectatorLocation;
 
-    @Setting(value = "position-spectator")
-    private List<Position> spectatorPositions;
+    @Setting(value = "locations-innocent")
+    @NonNull Set<Location> innocentLocations;
 
-    public String getName() {
-        return name;
-    }
-
-    public String getWorldName() {
-        return worldName;
-    }
-
-    public int getImposterAmount() {
-        return imposterAmount;
-    }
-
-    public int getSwordCooldown() {
-        return swordCooldown;
-    }
-
-    public Position getLobbyPosition() {
-        return lobbyPosition;
-    }
-
-    public List<Position> getInnocentPositions() {
-        return innocentPositions;
-    }
-
-    public List<Position> getImposterPositions() {
-        return imposterPositions;
-    }
-
-    public List<Position> getSpectatorPositions() {
-        return spectatorPositions;
-    }
-
-    @Override
-    public String toString() {
-        return "ArenaData{" +
-                "name='" + name + '\'' +
-                ", worldName='" + worldName + '\'' +
-                ", imposterAmount=" + imposterAmount +
-                ", swordCooldown=" + swordCooldown +
-                ", lobbyPosition=" + lobbyPosition +
-                ", innocentPositions=" + innocentPositions +
-                ", imposterPositions=" + imposterPositions +
-                ", spectatorPositions=" + spectatorPositions +
-                '}';
-    }
+    @Setting(value = "locations-imposter")
+    @NonNull Set<Location> imposterLocations;
 
 }
