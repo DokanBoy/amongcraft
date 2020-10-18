@@ -1,15 +1,10 @@
 package pw.zakharov.amongcraft;
 
 import me.lucko.helper.Commands;
-import me.lucko.helper.Helper;
 import me.lucko.helper.plugin.ExtendedJavaPlugin;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
-import org.bukkit.WorldType;
 import org.jetbrains.annotations.NotNull;
 import pw.zakharov.amongcraft.api.Arena;
-import pw.zakharov.amongcraft.arena.SingleArena;
+import pw.zakharov.amongcraft.api.ArenaLoader;
 import pw.zakharov.amongcraft.service.ArenaService;
 import pw.zakharov.amongcraft.service.ScoreboardService;
 import pw.zakharov.amongcraft.service.TaskService;
@@ -23,28 +18,25 @@ import static pw.zakharov.amongcraft.api.Arena.StopCause.UNKNOWN;
 
 public final class AmongCraft extends ExtendedJavaPlugin {
 
-    private World amongWorld;
-
-    private static @NotNull TeamService teamService;
-    private static @NotNull TaskService taskService;
-    private static @NotNull ArenaService arenaService;
-    private static @NotNull ScoreboardService scoreboardService;
+    private static TeamService teamService;
+    private static TaskService taskService;
+    private static ArenaService arenaService;
+    private static ScoreboardService scoreboardService;
 
     @Override
     protected void enable() {
-        WorldCreator wc = new WorldCreator("among-us_shuttle");
-        wc.type(WorldType.FLAT);
-        wc.generateStructures(false);
-        amongWorld = Helper.server().createWorld(wc);
+        saveResource("configuration.conf", false);
+        saveResource("localization.conf", false);
+        saveResource("arenas\\shuttle.conf", false);
 
         teamService = new TeamServiceImpl(this);
         taskService = new TaskServiceImpl(this);
         arenaService = new ArenaServiceImpl(this);
         scoreboardService = new ScoreboardServiceImpl(this);
 
-        arenaService.register(new SingleArena("Shuttle", amongWorld, new Location(amongWorld, 0, 4, 0), 2));
-
-        Arena shuttleArena = arenaService.getArena("Shuttle").orElseThrow(NullPointerException::new);
+        ArenaLoader arenaLoader = ArenaLoader.createLoader(getDataFolder().toPath().resolve("arenas"), "Shuttle");
+        Arena shuttleArena = arenaLoader.getArena();
+        arenaService.register(shuttleArena);
 
         Commands.create()
                 .assertPlayer()

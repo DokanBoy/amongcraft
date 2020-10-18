@@ -36,8 +36,6 @@ public interface Arena {
 
         @NotNull String getName();
 
-        int getMaxTeams();
-
         default int getTeamsAmount() {
             return getTeams().size();
         }

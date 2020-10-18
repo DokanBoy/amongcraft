@@ -17,7 +17,6 @@
 
         <bukkit.version>1.12.2-R0.1-SNAPSHOT</bukkit.version>
         <helper.version>5.6.5</helper.version>
-        <configurate.version>3.7.1</configurate.version>
         <hicari.version>3.4.5</hicari.version>
         <jetbrains-annotations.version>20.1.0</jetbrains-annotations.version>
         <guava.version>29.0-jre</guava.version>
@@ -79,34 +78,15 @@
             <version>${bukkit.version}</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>me.lucko</groupId>
             <artifactId>helper</artifactId>
             <version>${helper.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>${hicari.version}</version>
-        </dependency>
-
-        <!-- Configurate -->
-        <dependency>
-            <groupId>org.spongepowered</groupId>
-            <artifactId>configurate-core</artifactId>
-            <version>${configurate.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.spongepowered</groupId>
-            <artifactId>configurate-hocon</artifactId>
-            <version>${configurate.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.spongepowered</groupId>
-            <artifactId>configurate-gson</artifactId>
-            <version>${configurate.version}</version>
         </dependency>
 
         <!-- Utils -->

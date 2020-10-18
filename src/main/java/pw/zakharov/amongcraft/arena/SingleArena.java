@@ -44,11 +44,10 @@ public class SingleArena implements Arena {
 
     public SingleArena(@NotNull String arenaName,
                        @NotNull World world,
-                       @NotNull Location lobbyLocation,
-                       int teams) {
+                       @NotNull Location lobbyLocation) {
         this.world = world;
         this.state = DISABLED;
-        this.context = new SingleArenaContext(arenaName, lobbyLocation, teams);
+        this.context = new SingleArenaContext(arenaName, lobbyLocation);
 
         Log.info("Created arena: " + toString());
         enable();
@@ -139,7 +138,7 @@ public class SingleArena implements Arena {
         return context;
     }
 
-    private void setStatus(State state) {
+    private void setStatus(@NotNull State state) {
         this.state = state;
     }
 
@@ -150,7 +149,9 @@ public class SingleArena implements Arena {
 
     @Override
     public void randomJoin(@NotNull Player player) {
-        join(player, RandomSelector.uniform(context.getTeams()).pick());
+        // todo : максимальное количество импостеров и спектаторов нельзя пикать
+        @NotNull Team team = RandomSelector.uniform(context.getTeams()).pick();
+        join(player, team);
     }
 
     @Override
@@ -200,9 +201,8 @@ public class SingleArena implements Arena {
         private final @NotNull String arenaName;
         private final @NotNull Location lobbyLocation;
         private final @NotNull Set<Team> teams;
-        private final int maxTeams;
 
-        public SingleArenaContext(@NotNull String arenaName, @NotNull Location lobbyLocation, int maxTeams) {
+        public SingleArenaContext(@NotNull String arenaName, @NotNull Location lobbyLocation) {
             final TeamService teamService = AmongCraft.getTeamService();
             teamService.register(new ImposterTeam(ImmutableSet.of(lobbyLocation.add(10, 0, 10)), 2));
             teamService.register(new InnocentTeam(ImmutableSet.of(lobbyLocation.add(15, 0, 15)), 2));
@@ -210,18 +210,12 @@ public class SingleArena implements Arena {
 
             this.arenaName = arenaName;
             this.teams = teamService.getTeams();
-            this.maxTeams = maxTeams;
             this.lobbyLocation = lobbyLocation;
         }
 
         @Override
         public @NotNull String getName() {
             return arenaName;
-        }
-
-        @Override
-        public int getMaxTeams() {
-            return maxTeams;
         }
 
         @Override
@@ -247,9 +241,9 @@ public class SingleArena implements Arena {
                     "arenaName='" + arenaName +
                     ", lobbyLocation=" + lobbyLocation +
                     ", teams=" + teams +
-                    ", maxTeams=" + maxTeams +
                     '}';
         }
+
     }
 
 }
