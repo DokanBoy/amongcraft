@@ -3,6 +3,7 @@ package pw.zakharov.amongcraft;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
+import me.lucko.helper.Commands;
 import me.lucko.helper.plugin.ExtendedJavaPlugin;
 import pw.zakharov.amongcraft.api.Arena;
 import pw.zakharov.amongcraft.arena.loader.ArenaLoader;
@@ -19,14 +20,10 @@ import pw.zakharov.amongcraft.service.impl.TeamServiceImpl;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public final class AmongCraft extends ExtendedJavaPlugin {
 
-    static @Getter
-    TeamService teamService;
-    static @Getter
-    TaskService taskService;
-    static @Getter
-    ArenaService arenaService;
-    static @Getter
-    ScoreboardService scoreboardService;
+    static @Getter TeamService teamService;
+    static @Getter TaskService taskService;
+    static @Getter ArenaService arenaService;
+    static @Getter ScoreboardService scoreboardService;
 
     @Override
     protected void enable() {
@@ -40,11 +37,12 @@ public final class AmongCraft extends ExtendedJavaPlugin {
         arenaService = new ArenaServiceImpl(this);
         scoreboardService = new ScoreboardServiceImpl(this);
 
+        /* TEST USAGE */
         ArenaLoader arenaLoader = ArenaLoader.createLoader(ArenaLoader.DEFAULT_ARENA_PATH, "Shuttle");
         Arena shuttleArena = arenaLoader.getArena();
         arenaService.register(shuttleArena);
 
-/*        Commands.create()
+        Commands.create()
                 .assertPlayer()
                 .handler(context -> {
                     shuttleArena.enable();
@@ -57,10 +55,10 @@ public final class AmongCraft extends ExtendedJavaPlugin {
         Commands.create()
                 .assertPlayer()
                 .handler(context -> {
-                    shuttleArena.stop(UNKNOWN, 5);
+                    shuttleArena.stop(Arena.StopCause.UNKNOWN, 5);
                     shuttleArena.disable();
                 })
-                .register("astop");*/
+                .register("astop");
     }
 
     @Override
