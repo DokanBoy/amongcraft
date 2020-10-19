@@ -4,7 +4,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import me.lucko.helper.config.objectmapping.Setting;
 import me.lucko.helper.config.objectmapping.serialize.ConfigSerializable;
-import org.bukkit.Location;
+import me.lucko.helper.serialize.Point;
 
 import java.util.Set;
 
@@ -39,15 +39,15 @@ public class ArenaData {
 
     /* Locations */
     @Setting(value = "location-lobby")
-    @NonNull Location lobbyLocation;
+    @NonNull Point lobbyPoint;
 
     @Setting(value = "location-spectator")
-    @NonNull Location spectatorLocation;
+    @NonNull Point spectatorPoint;
 
     @Setting(value = "locations-innocent")
-    @NonNull Set<Location> innocentLocations;
+    @NonNull Set<Point> innocentPoints;
 
     @Setting(value = "locations-imposter")
-    @NonNull Set<Location> imposterLocations;
+    @NonNull Set<Point> imposterPoints;
 
 }

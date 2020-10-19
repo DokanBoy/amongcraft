@@ -41,8 +41,8 @@ public class ArenaServiceImpl implements ArenaService {
     @Override
     public void unregister(@NonNull String name) {
         Optional<Arena> arena = arenas.stream()
-                .filter(a -> a.getContext().getName().equals(name))
-                .findFirst();
+                                      .filter(a -> a.getContext().getName().equals(name))
+                                      .findFirst();
 
         arena.ifPresent(a -> {
             a.stop(Arena.StopCause.UNKNOWN);
@@ -53,7 +53,9 @@ public class ArenaServiceImpl implements ArenaService {
 
     @Override
     public Optional<Arena> getArena(@NonNull String name) {
-        return arenas.stream().filter(a -> a.getContext().getName().equals(name)).findFirst();
+        return arenas.stream()
+                     .filter(a -> a.getContext().getName().equals(name))
+                     .findFirst();
     }
 
 }

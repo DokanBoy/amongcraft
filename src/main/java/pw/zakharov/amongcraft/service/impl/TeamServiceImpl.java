@@ -31,13 +31,17 @@ public class TeamServiceImpl implements TeamService {
         if (teamArenaMap.containsKey(arenaName)) {
             Set<Team> storedTeams = teamArenaMap.get(arenaName);
             if (storedTeams.stream().anyMatch(t -> t.getContext().getName().equals(team.getContext().getName()))) {
-                Log.warn("Team with name " + team.getContext().getName() + " already register!");
+                Log.info("Team with name " + team.getContext().getName() + " already register!");
                 return;
             }
             storedTeams.add(team);
+            Log.info("Team with name " + team.getContext().getName() + " successfully registered!");
         } else {
-            teamArenaMap.put(arenaName, Collections.singleton(team));
-            Log.warn("Team with name " + team.getContext().getName() + " successfully registered!" + teamArenaMap.toString());
+            Set<Team> singleTeam = new LinkedHashSet<>();
+            singleTeam.add(team);
+
+            teamArenaMap.put(arenaName, singleTeam);
+            Log.info("Team with name " + team.getContext().getName() + " successfully registered!");
         }
     }
 
@@ -49,17 +53,17 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public Optional<Team> getTeam(@NonNull String arenaName, @NonNull String teamName) {
         return teamArenaMap.get(arenaName)
-                .stream()
-                .filter(team -> team.getContext().getName().equals(teamName))
-                .findFirst();
+                           .stream()
+                           .filter(team -> team.getContext().getName().equals(teamName))
+                           .findFirst();
     }
 
     @Override
     public Optional<Team> getTeam(@NonNull String arenaName, Team.@NonNull Role role) {
         return teamArenaMap.get(arenaName)
-                .stream()
-                .filter(team -> team.getContext().getRole() == role)
-                .findFirst();
+                           .stream()
+                           .filter(team -> team.getContext().getRole() == role)
+                           .findFirst();
     }
 
     @Override

@@ -16,7 +16,8 @@ import java.util.Set;
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
  * Date: 14.10.2020 17:47
  */
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PRIVATE,
+               makeFinal = true)
 public class TaskServiceImpl implements TaskService {
 
     @NonNull Plugin plugin;
@@ -39,10 +40,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Optional<Task> getTask(@NonNull String name) {
-        return tasks
-                .stream()
-                .filter(task -> task.getContext().getName().equals(name))
-                .findFirst();
+        return tasks.stream()
+                    .filter(task -> task.getContext().getName().equals(name))
+                    .findFirst();
     }
 
 }

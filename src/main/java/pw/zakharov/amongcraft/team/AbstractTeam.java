@@ -3,6 +3,7 @@ package pw.zakharov.amongcraft.team;
 import com.google.common.collect.Iterators;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import lombok.experimental.PackagePrivate;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -18,14 +19,14 @@ import java.util.Set;
  */
 @ToString(exclude = {"spawnsIterator"})
 @EqualsAndHashCode(exclude = {"spawnsIterator"})
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@FieldDefaults(level = AccessLevel.PROTECTED, makeFinal = true)
 public abstract class AbstractTeam implements Team {
 
     @Getter int maxSize;
     @Getter @NonNull TeamContext context;
     @Getter @NonNull Set<Player> players;
     @Getter @NonNull Set<Location> spawns;
-    @NonNull Iterator<Location> spawnsIterator;
+    @NonNull @PackagePrivate Iterator<Location> spawnsIterator;
 
     protected AbstractTeam(@NonNull TeamContext context, @NonNull Set<Location> spawns, int maxSize) {
         this.context = context;
@@ -43,7 +44,7 @@ public abstract class AbstractTeam implements Team {
 
     @ToString
     @EqualsAndHashCode
-    @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+    @FieldDefaults(level = AccessLevel.PROTECTED, makeFinal = true)
     protected abstract static class AbstractTeamContext implements TeamContext {
 
         @Getter @NonNull String name;
