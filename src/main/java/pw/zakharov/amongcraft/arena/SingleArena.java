@@ -41,10 +41,10 @@ import static pw.zakharov.amongcraft.api.Arena.StopCause.UNKNOWN;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SingleArena implements Arena {
 
-    @NonNull @NonFinal State state;
+    @Getter @NonNull World world;
+    @Getter @NonNull ArenaContext context;
 
-    @NonNull World world;
-    @NonNull ArenaContext context;
+    @Getter @NonNull @NonFinal State state;
 
     public SingleArena(@NonNull World world, @NonNull SingleArenaContext context) {
         this.world = world;
@@ -135,18 +135,8 @@ public class SingleArena implements Arena {
                 .run(() -> stop(cause));
     }
 
-    @Override
-    public @NonNull ArenaContext getContext() {
-        return context;
-    }
-
     private void setStatus(@NonNull State state) {
         this.state = state;
-    }
-
-    @Override
-    public @NonNull State getState() {
-        return state;
     }
 
     @Override
@@ -199,11 +189,10 @@ public class SingleArena implements Arena {
          @Getter @NonNull Set<Team> teams;
 
         public SingleArenaContext(@NonNull String name,
-                                  @NonNull Location lobby,
-                                  @NonNull Location spectatorSpawn,
+                                  @NonNull Location lobby, @NonNull Location spectatorSpawn,
                                   @NonNull Set<Location> innocentSpawns, int innocents,
                                   @NonNull Set<Location> imposterSpawns, int imposters) {
-            TeamService teamService = AmongCraft.getTeamService();
+            final @NonNull TeamService teamService = AmongCraft.getTeamService();
             teamService.register(name, new InnocentTeam(innocentSpawns, innocents));
             teamService.register(name, new ImposterTeam(imposterSpawns, imposters));
             teamService.register(name, new SpectatorTeam(spectatorSpawn));

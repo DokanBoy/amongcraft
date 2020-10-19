@@ -19,6 +19,8 @@ public interface TeamService {
 
     Optional<Team> getTeam(@NonNull String arenaName, @NonNull String teamName);
 
+    Optional<Team> getTeam(@NonNull String arenaName, @NonNull Team.Role role);
+
     Optional<Team> getPlayerTeam(@NonNull Player player);
 
     @NonNull Set<Team> getArenaTeams(@NonNull String arenaName);

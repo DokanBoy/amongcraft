@@ -37,11 +37,6 @@ public abstract class AbstractTeam implements Team {
     }
 
     @Override
-    public int getSize() {
-        return players.size();
-    }
-
-    @Override
     public @NonNull Location getNextSpawn() {
         return spawnsIterator.next();
     }

@@ -2,6 +2,7 @@ package pw.zakharov.amongcraft.api;
 
 import lombok.NonNull;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.Set;
@@ -31,6 +32,8 @@ public interface Arena {
     @NonNull ArenaContext getContext();
 
     @NonNull State getState();
+
+    @NonNull World getWorld();
 
     interface ArenaContext {
 

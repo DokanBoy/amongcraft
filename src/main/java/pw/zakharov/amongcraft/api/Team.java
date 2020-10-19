@@ -16,7 +16,9 @@ public interface Team {
     /**
      * @return количество игроков в команде
      */
-    int getSize();
+    default int getSize() {
+        return getPlayers().size();
+    }
 
     /**
      * @return максимальное количество игроков в команде

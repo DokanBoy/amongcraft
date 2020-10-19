@@ -16,11 +16,11 @@ import pw.zakharov.amongcraft.api.Task;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AbstractTask implements Task {
 
-    @Getter @NonNull @NonFinal State state;
-
     @Getter @NonNull TaskContext context;
     @Getter @NonNull Location startLocation;
     @Getter @NonNull Location taskLocation;
+
+    @Getter @NonNull @NonFinal State state;
 
     protected AbstractTask(@NonNull TaskContext context,
                            @NonNull Location startLocation,

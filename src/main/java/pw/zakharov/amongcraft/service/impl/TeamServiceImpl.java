@@ -1,6 +1,5 @@
 package pw.zakharov.amongcraft.service.impl;
 
-import com.google.common.collect.ImmutableSet;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
@@ -37,8 +36,8 @@ public class TeamServiceImpl implements TeamService {
             }
             storedTeams.add(team);
         } else {
-            teamArenaMap.put(arenaName, ImmutableSet.of(team));
-            Log.warn("Team with name " + team.getContext().getName() + " successfully registered!");
+            teamArenaMap.put(arenaName, Collections.singleton(team));
+            Log.warn("Team with name " + team.getContext().getName() + " successfully registered!" + teamArenaMap.toString());
         }
     }
 
@@ -49,7 +48,18 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public Optional<Team> getTeam(@NonNull String arenaName, @NonNull String teamName) {
-        return teamArenaMap.get(arenaName).stream().filter(team -> team.getContext().getName().equals(teamName)).findFirst();
+        return teamArenaMap.get(arenaName)
+                .stream()
+                .filter(team -> team.getContext().getName().equals(teamName))
+                .findFirst();
+    }
+
+    @Override
+    public Optional<Team> getTeam(@NonNull String arenaName, Team.@NonNull Role role) {
+        return teamArenaMap.get(arenaName)
+                .stream()
+                .filter(team -> team.getContext().getRole() == role)
+                .findFirst();
     }
 
     @Override

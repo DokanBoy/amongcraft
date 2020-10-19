@@ -13,10 +13,11 @@ import java.util.Set;
  * Date: 15.10.2020 22:42
  */
 @Data
-@FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ConfigSerializable
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class ArenaData {
 
     /* Arena info */
@@ -28,13 +29,13 @@ public class ArenaData {
 
     /* Team settings */
     @Setting(value = "team-imposter-size")
-    int imposterAmount;
+    int maxImposters;
 
     @Setting(value = "team-imposter-sword-cooldown")
     int swordCooldown;
 
     @Setting(value = "team-innocent-size")
-    int innocentAmount;
+    int maxInnocents;
 
     /* Locations */
     @Setting(value = "location-lobby")
