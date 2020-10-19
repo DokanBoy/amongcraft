@@ -1,4 +1,4 @@
-package pw.zakharov.amongcraft.api.stat;
+package pw.zakharov.amongcraft.api.statistic;
 
 import lombok.NonNull;
 

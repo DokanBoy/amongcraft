@@ -47,8 +47,6 @@ public final class AmongCraft extends ExtendedJavaPlugin {
                 .handler(context -> {
                     shuttleArena.enable();
                     shuttleArena.start(5);
-                    shuttleArena.randomJoin(context.sender());
-                    context.reply("Arena state: " + shuttleArena.getState().name());
                 })
                 .register("astart");
 

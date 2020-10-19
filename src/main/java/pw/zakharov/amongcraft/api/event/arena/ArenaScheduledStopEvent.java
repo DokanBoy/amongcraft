@@ -10,17 +10,21 @@ import pw.zakharov.amongcraft.api.Arena;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
- * Date: 06.10.2020 21:51
+ * Date: 19.10.2020 22:42
  */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ArenaStartEvent extends Event {
+public class ArenaScheduledStopEvent extends Event {
 
     static HandlerList handlers = new HandlerList();
 
     @Getter @NonNull Arena arena;
+    @Getter @NonNull Arena.StopCause cause;
+    @Getter int afterSec;
 
-    public ArenaStartEvent(@NonNull Arena arena) {
+    public ArenaScheduledStopEvent(@NonNull Arena arena, @NonNull Arena.StopCause cause, int afterSec) {
         this.arena = arena;
+        this.cause = cause;
+        this.afterSec = afterSec;
     }
 
     public static HandlerList getHandlerList() {

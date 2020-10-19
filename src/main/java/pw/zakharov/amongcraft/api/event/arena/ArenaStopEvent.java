@@ -1,6 +1,9 @@
 package pw.zakharov.amongcraft.api.event.arena;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.experimental.FieldDefaults;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import pw.zakharov.amongcraft.api.Arena;
@@ -9,32 +12,26 @@ import pw.zakharov.amongcraft.api.Arena;
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
  * Date: 06.10.2020 21:52
  */
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ArenaStopEvent extends Event {
 
-    private static final HandlerList HANDLERS = new HandlerList();
+    static HandlerList handlers = new HandlerList();
 
-    private final @NonNull Arena arena;
-    private final @NonNull Arena.StopCause cause;
+    @Getter @NonNull Arena arena;
+    @Getter @NonNull Arena.StopCause cause;
 
     public ArenaStopEvent(@NonNull Arena arena, @NonNull Arena.StopCause cause) {
         this.arena = arena;
         this.cause = cause;
     }
 
-    public HandlerList getHandlers() {
-        return HANDLERS;
-    }
-
     public static HandlerList getHandlerList() {
-        return HANDLERS;
+        return handlers;
     }
 
-    public @NonNull Arena getArena() {
-        return arena;
-    }
-
-    public @NonNull Arena.StopCause getCause() {
-        return cause;
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
     }
 
 }

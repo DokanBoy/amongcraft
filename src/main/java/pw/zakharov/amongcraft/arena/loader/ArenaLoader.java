@@ -22,5 +22,4 @@ public interface ArenaLoader {
 
     @NonNull Arena getArena();
 
-
 }

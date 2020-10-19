@@ -2,7 +2,7 @@ package pw.zakharov.amongcraft.api.member;
 
 import lombok.NonNull;
 import pw.zakharov.amongcraft.api.Task;
-import pw.zakharov.amongcraft.api.stat.Statistic;
+import pw.zakharov.amongcraft.api.statistic.Statistic;
 
 import java.util.Set;
 import java.util.UUID;
@@ -19,7 +19,7 @@ public interface Member {
 
     @NonNull Set<Task> getTasks();
 
-    default @NonNull Statistic<?> findStatByType(Statistic.Type type) {
+    default @NonNull Statistic<?> findStatByType(@NonNull Statistic.Type type) {
         return getStats()
                 .stream()
                 .filter(stat -> stat.getType() == type)

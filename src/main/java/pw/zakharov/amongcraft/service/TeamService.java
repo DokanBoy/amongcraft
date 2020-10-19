@@ -2,6 +2,7 @@ package pw.zakharov.amongcraft.service;
 
 import lombok.NonNull;
 import org.bukkit.entity.Player;
+import pw.zakharov.amongcraft.api.Arena;
 import pw.zakharov.amongcraft.api.Team;
 
 import java.util.Optional;
@@ -20,6 +21,15 @@ public interface TeamService {
     Optional<Team> getTeam(@NonNull String arenaName, @NonNull String teamName);
 
     Optional<Team> getTeam(@NonNull String arenaName, @NonNull Team.Role role);
+
+    static Team getTeam(@NonNull Arena arena, @NonNull Team.Role role) {
+        return arena
+                .getContext()
+                .getTeams()
+                .stream()
+                .filter(team -> team.getContext().getRole() == role)
+                .findFirst().orElseThrow(NullPointerException::new);
+    }
 
     Optional<Team> getPlayerTeam(@NonNull Player player);
 

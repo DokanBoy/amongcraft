@@ -10,17 +10,19 @@ import pw.zakharov.amongcraft.api.Arena;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
- * Date: 06.10.2020 21:51
+ * Date: 19.10.2020 22:42
  */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ArenaStartEvent extends Event {
+public class ArenaScheduledStartEvent extends Event {
 
     static HandlerList handlers = new HandlerList();
 
     @Getter @NonNull Arena arena;
+    @Getter int afterSec;
 
-    public ArenaStartEvent(@NonNull Arena arena) {
+    public ArenaScheduledStartEvent(@NonNull Arena arena, int afterSec) {
         this.arena = arena;
+        this.afterSec = afterSec;
     }
 
     public static HandlerList getHandlerList() {
@@ -31,5 +33,4 @@ public class ArenaStartEvent extends Event {
     public HandlerList getHandlers() {
         return handlers;
     }
-
 }
