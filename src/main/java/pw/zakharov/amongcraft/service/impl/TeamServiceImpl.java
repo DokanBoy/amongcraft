@@ -37,7 +37,9 @@ public class TeamServiceImpl implements TeamService {
             }
             storedTeams.add(team);
         } else {
-            teamArenaMap.put(arenaName, Collections.singleton(team));
+            val singleTeam = new LinkedHashSet<Team>(1);
+            singleTeam.add(team);
+            teamArenaMap.put(arenaName, singleTeam);
         }
         Log.info("Team with name " + team.getContext().getName() + " successfully registered!");
     }
