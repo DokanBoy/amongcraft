@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
+import lombok.val;
 import me.lucko.helper.utils.Log;
 import org.bukkit.plugin.Plugin;
 import pw.zakharov.amongcraft.api.Arena;
@@ -40,9 +41,9 @@ public class ArenaServiceImpl implements ArenaService {
 
     @Override
     public void unregister(@NonNull String name) {
-        Optional<Arena> arena = arenas.stream()
-                                      .filter(a -> a.getContext().getName().equals(name))
-                                      .findFirst();
+        val arena = arenas.stream()
+                          .filter(a -> a.getContext().getName().equals(name))
+                          .findFirst();
 
         arena.ifPresent(a -> {
             a.stop(Arena.StopCause.UNKNOWN);

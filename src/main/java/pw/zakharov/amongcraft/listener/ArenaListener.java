@@ -3,21 +3,19 @@ package pw.zakharov.amongcraft.listener;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
+import lombok.var;
 import me.lucko.helper.Helper;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
-import pw.zakharov.amongcraft.api.Arena;
 import pw.zakharov.amongcraft.api.Team;
 import pw.zakharov.amongcraft.api.event.arena.ArenaScheduledStartEvent;
 import pw.zakharov.amongcraft.api.event.arena.ArenaScheduledStopEvent;
 import pw.zakharov.amongcraft.api.event.arena.ArenaStartEvent;
 import pw.zakharov.amongcraft.api.event.arena.ArenaStopEvent;
 import pw.zakharov.amongcraft.service.TeamService;
-
-import java.util.Set;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
@@ -36,16 +34,16 @@ public class ArenaListener implements Listener {
 
     @EventHandler
     public void onStart(@NonNull ArenaStartEvent event) {
-        final @NonNull Arena arena = event.getArena();
-        final @NonNull Set<Team> teams = arena.getContext().getTeams();
+        var arena = event.getArena();
+        var teams = arena.getContext().getTeams();
 
         for (Player p: arena.getContext().getPlayers()) {
-            final @NonNull Team randomTeam = arena.randomJoin(p);
+            var randomTeam = arena.randomJoin(p);
             p.sendMessage(new TextComponent("Вы присоеденились к " + randomTeam)); // todo: remove debug
         }
 
         for (Team t : teams) {
-            final @NonNull Set<Player> teamPlayers = t.getPlayers();
+            var teamPlayers = t.getPlayers();
             for (Player p : teamPlayers) {
                 p.teleport(t.getNextSpawn());
                 p.sendMessage(new TextComponent("Игра началась! Вы телепортированы на арену."));

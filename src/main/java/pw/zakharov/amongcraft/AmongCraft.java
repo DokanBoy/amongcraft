@@ -3,6 +3,7 @@ package pw.zakharov.amongcraft;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.FieldDefaults;
+import lombok.val;
 import me.lucko.helper.Commands;
 import me.lucko.helper.plugin.ExtendedJavaPlugin;
 import pw.zakharov.amongcraft.api.Arena;
@@ -44,8 +45,8 @@ public final class AmongCraft extends ExtendedJavaPlugin {
         registerListener(new PlayerListener(this, arenaService, teamService));
 
         /* TEST USAGE */
-        ArenaLoader arenaLoader = ArenaLoader.createLoader(ArenaLoader.DEFAULT_ARENA_PATH, "Shuttle");
-        Arena shuttleArena = arenaLoader.getArena();
+        val arenaLoader = ArenaLoader.createLoader(ArenaLoader.DEFAULT_ARENA_PATH, "Shuttle");
+        val shuttleArena = arenaLoader.getArena();
         arenaService.register(shuttleArena);
 
         Commands.create()

@@ -1,10 +1,7 @@
 package pw.zakharov.amongcraft.arena.loader;
 
 import com.google.common.reflect.TypeToken;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import me.lucko.helper.Helper;
@@ -14,15 +11,12 @@ import me.lucko.helper.config.hocon.HoconConfigurationLoader;
 import me.lucko.helper.config.objectmapping.ObjectMappingException;
 import me.lucko.helper.serialize.Point;
 import me.lucko.helper.utils.Log;
-import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import pw.zakharov.amongcraft.AmongCraft;
 import pw.zakharov.amongcraft.api.Arena;
-import pw.zakharov.amongcraft.api.Team;
 import pw.zakharov.amongcraft.arena.SingleArena;
 import pw.zakharov.amongcraft.data.ArenaData;
-import pw.zakharov.amongcraft.service.TeamService;
 import pw.zakharov.amongcraft.util.CollectionUtils;
 
 import java.io.IOException;
@@ -62,27 +56,27 @@ import static pw.zakharov.amongcraft.api.Team.Role.*;
     public @NonNull void saveArena(@NonNull Arena arena) {
         this.arena = arena;
 
-        final @NonNull TeamService teamService = AmongCraft.getTeamService();
-        final @NonNull Arena.ArenaContext arenaContext = arena.getContext();
-        final @NonNull Team spectatorTeam = teamService.getTeam(arenaContext.getName(), SPECTATOR)
-                                                       .orElseThrow(NullPointerException::new);
-        final @NonNull Team innocentTeam = teamService.getTeam(arenaContext.getName(), INNOCENT)
-                                                      .orElseThrow(NullPointerException::new);
-        final @NonNull Team imposterTeam = teamService.getTeam(arenaContext.getName(), IMPOSTER)
-                                                      .orElseThrow(NullPointerException::new);
-        final ArenaData arenaData = ArenaData.builder()
-                                             .worldName(arena.getWorld().getName())
-                                             .name(arenaContext.getName())
-                                             .lobbyPoint(Point.of(arenaContext.getLobby()))
-                                             .spectatorPoint(Point.of(spectatorTeam.getNextSpawn()))
-                                             .innocentPoints(CollectionUtils
-                                                     .locations2Points(innocentTeam.getSpawns()))
-                                             .maxInnocents(innocentTeam.getMaxSize())
-                                             .imposterPoints(CollectionUtils
-                                                     .locations2Points(imposterTeam.getSpawns()))
-                                             .maxImposters(imposterTeam.getMaxSize())
-                                             .swordCooldown(5)
-                                             .build();
+        val teamService = AmongCraft.getTeamService();
+        val arenaContext = arena.getContext();
+        val spectatorTeam = teamService.getTeam(arenaContext.getName(), SPECTATOR)
+                                       .orElseThrow(NullPointerException::new);
+        val innocentTeam = teamService.getTeam(arenaContext.getName(), INNOCENT)
+                                      .orElseThrow(NullPointerException::new);
+        val imposterTeam = teamService.getTeam(arenaContext.getName(), IMPOSTER)
+                                      .orElseThrow(NullPointerException::new);
+        val arenaData = ArenaData.builder()
+                                 .worldName(arena.getWorld().getName())
+                                 .name(arenaContext.getName())
+                                 .lobbyPoint(Point.of(arenaContext.getLobby()))
+                                 .spectatorPoint(Point.of(spectatorTeam.getNextSpawn()))
+                                 .innocentPoints(CollectionUtils
+                                         .locations2Points(innocentTeam.getSpawns()))
+                                 .maxInnocents(innocentTeam.getMaxSize())
+                                 .imposterPoints(CollectionUtils
+                                         .locations2Points(imposterTeam.getSpawns()))
+                                 .maxImposters(imposterTeam.getMaxSize())
+                                 .swordCooldown(5)
+                                 .build();
 
         saveDataToFile(arenaData);
     }
@@ -108,9 +102,9 @@ import static pw.zakharov.amongcraft.api.Team.Role.*;
     }
 
     private @NonNull Arena loadArena(ArenaData arenaData) {
-        final WorldCreator wc = new WorldCreator(arenaData.getWorldName()).type(WorldType.FLAT)
+        var wc = new WorldCreator(arenaData.getWorldName()).type(WorldType.FLAT)
                                                                           .generateStructures(false);
-        final World world = Helper.server().createWorld(wc);
+        var world = Helper.server().createWorld(wc);
 
         return new SingleArena(world, new SingleArena.SingleArenaContext(arenaData.getName(),
                 arenaData.getLobbyPoint().toLocation(), arenaData.getSpectatorPoint().toLocation(),

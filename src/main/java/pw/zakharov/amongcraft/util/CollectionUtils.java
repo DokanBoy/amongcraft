@@ -2,6 +2,7 @@ package pw.zakharov.amongcraft.util;
 
 import lombok.NonNull;
 import lombok.experimental.UtilityClass;
+import lombok.val;
 import me.lucko.helper.serialize.Point;
 import org.bukkit.Location;
 
@@ -16,7 +17,7 @@ import java.util.Set;
 public class CollectionUtils {
 
     public @NonNull Set<Location> points2Locations(@NonNull Set<Point> points) {
-        final @NonNull Set<Location> locations = new LinkedHashSet<>();
+        val locations = new LinkedHashSet<Location>();
         for (Point point : points) {
             locations.add(point.toLocation());
         }
@@ -24,7 +25,7 @@ public class CollectionUtils {
     }
 
     public @NonNull Set<Point> locations2Points(@NonNull Set<Location> locations) {
-        final @NonNull Set<Point> points = new LinkedHashSet<>();
+        val points = new LinkedHashSet<Point>();
         for (Location location : locations) {
             points.add(Point.of(location));
         }

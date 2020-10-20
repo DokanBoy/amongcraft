@@ -3,6 +3,7 @@ package pw.zakharov.amongcraft.service.impl;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
+import lombok.val;
 import me.lucko.helper.utils.Log;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -29,20 +30,16 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public void register(@NonNull String arenaName, @NonNull Team team) {
         if (teamArenaMap.containsKey(arenaName)) {
-            Set<Team> storedTeams = teamArenaMap.get(arenaName);
+            val storedTeams = teamArenaMap.get(arenaName);
             if (storedTeams.stream().anyMatch(t -> t.getContext().getName().equals(team.getContext().getName()))) {
                 Log.info("Team with name " + team.getContext().getName() + " already register!");
                 return;
             }
             storedTeams.add(team);
-            Log.info("Team with name " + team.getContext().getName() + " successfully registered!");
         } else {
-            Set<Team> singleTeam = new LinkedHashSet<>();
-            singleTeam.add(team);
-
-            teamArenaMap.put(arenaName, singleTeam);
-            Log.info("Team with name " + team.getContext().getName() + " successfully registered!");
+            teamArenaMap.put(arenaName, Collections.singleton(team));
         }
+        Log.info("Team with name " + team.getContext().getName() + " successfully registered!");
     }
 
     @Override
@@ -68,7 +65,7 @@ public class TeamServiceImpl implements TeamService {
 
     @Override
     public Optional<Team> getPlayerTeam(@NonNull Player player) {
-        Collection<Set<Team>> storedTeams = teamArenaMap.values();
+        val storedTeams = teamArenaMap.values();
         for (Set<Team> teams : storedTeams) {
             for (Team team : teams) {
                 if (team.getPlayers().contains(player)) return Optional.of(team);

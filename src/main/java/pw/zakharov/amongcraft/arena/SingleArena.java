@@ -27,7 +27,6 @@ import pw.zakharov.amongcraft.team.InnocentTeam;
 import pw.zakharov.amongcraft.team.SpectatorTeam;
 
 import java.util.LinkedHashSet;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -149,25 +148,21 @@ public class SingleArena implements Arena {
     // todo: выглядит как говно. переделать. как?
     @Override
     public @NonNull Team randomJoin(@NonNull Player player) {
-        final @NonNull Team imposterTeam = TeamService.getTeam(this, Team.Role.IMPOSTER);
-        final @NonNull Team innocentTeam = TeamService.getTeam(this, Team.Role.IMPOSTER);
-        final @NonNull Team spectatorTeam = TeamService.getTeam(this, Team.Role.SPECTATOR);
+        val imposterTeam = TeamService.getTeam(this, Team.Role.IMPOSTER);
+        val innocentTeam = TeamService.getTeam(this, Team.Role.IMPOSTER);
+        val spectatorTeam = TeamService.getTeam(this, Team.Role.SPECTATOR);
 
         if (imposterTeam.getSize() < imposterTeam.getMaxSize() && innocentTeam.getSize() < innocentTeam.getMaxSize()) {
-            Log.info("В обоих командах есть место, выбираем рандомную");
-            Team randomTeam = RandomSelector.uniform(ImmutableSet.of(imposterTeam, innocentTeam)).pick();
+            val randomTeam = RandomSelector.uniform(ImmutableSet.of(imposterTeam, innocentTeam)).pick();
             join(player, randomTeam);
             return randomTeam;
         } else if (imposterTeam.getSize() >= imposterTeam.getMaxSize()) {
-            Log.info("В команде импостеров закончилось место, пикаем innocentTeam");
             join(player, innocentTeam);
             return innocentTeam;
         } else if (innocentTeam.getSize() >= innocentTeam.getMaxSize()) {
-            Log.info("В команде мирных закончилось место, пикаем imposterTeam");
             join(player, imposterTeam);
             return imposterTeam;
         } else {
-            Log.info("В командах закончилось место, пикаем spectatorTeam");
             join(player, spectatorTeam);
             return spectatorTeam;
         }
@@ -179,7 +174,7 @@ public class SingleArena implements Arena {
             Log.warn("Arena " + context.getName() + " is disabled. Enable before join!" + "");
             return;
         }
-        final Optional<Team> currentTeam = context.getTeams()
+        val currentTeam = context.getTeams()
                                             .stream()
                                             .filter(t -> t.getPlayers().contains(player))
                                             .findFirst();
@@ -208,7 +203,7 @@ public class SingleArena implements Arena {
                                   @NonNull Location lobby, @NonNull Location spectatorSpawn,
                                   @NonNull Set<Location> innocentSpawns, int innocents,
                                   @NonNull Set<Location> imposterSpawns, int imposters) {
-            final @NonNull TeamService teamService = AmongCraft.getTeamService();
+            val teamService = AmongCraft.getTeamService();
             teamService.register(name, new InnocentTeam(innocentSpawns, innocents));
             teamService.register(name, new ImposterTeam(imposterSpawns, imposters));
             teamService.register(name, new SpectatorTeam(spectatorSpawn));

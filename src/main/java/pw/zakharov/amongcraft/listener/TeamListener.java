@@ -3,6 +3,7 @@ package pw.zakharov.amongcraft.listener;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
+import lombok.val;
 import me.lucko.helper.item.ItemStackBuilder;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -58,8 +59,8 @@ public class TeamListener implements Listener {
     public void onJoinToImposters(@NonNull TeamJoinEvent event) {
         if (event.getTeam().getContext().getRole() != Team.Role.IMPOSTER) return;
 
-        final @NonNull Arena arena = event.getArena();
-        final @NonNull Player player = event.getPlayer();
+        val arena = event.getArena();
+        val player = event.getPlayer();
 
         player.setDisplayName("");
         player.getInventory().clear();
@@ -74,8 +75,8 @@ public class TeamListener implements Listener {
     public void onJoinToInnocents(@NonNull TeamJoinEvent event) {
         if (event.getTeam().getContext().getRole() != Team.Role.INNOCENT) return;
 
-        final @NonNull Arena arena = event.getArena();
-        final @NonNull Player player = event.getPlayer();
+        val arena = event.getArena();
+        val player = event.getPlayer();
 
         player.setDisplayName("");
         player.getInventory().clear();
@@ -90,8 +91,8 @@ public class TeamListener implements Listener {
     public void onJoinToSpectators(@NonNull TeamJoinEvent event) {
         if (event.getTeam().getContext().getRole() != Team.Role.SPECTATOR) return;
 
-        final @NonNull Arena arena = event.getArena();
-        final @NonNull Player player = event.getPlayer();
+        val arena = event.getArena();
+        val player = event.getPlayer();
 
         player.setGameMode(GameMode.SPECTATOR);
     }
@@ -102,8 +103,8 @@ public class TeamListener implements Listener {
      */
     @EventHandler
     public void onLeave(@NonNull TeamLeaveEvent event) {
-        final @NonNull Arena arena = event.getArena();
-        final @NonNull Player player = event.getPlayer();
+        val arena = event.getArena();
+        val player = event.getPlayer();
 
         player.getInventory().clear();
     }
