@@ -40,7 +40,8 @@ public class ArenaListener implements Listener {
         final @NonNull Set<Team> teams = arena.getContext().getTeams();
 
         for (Player p: arena.getContext().getPlayers()) {
-            arena.randomJoin(p);
+            final @NonNull Team randomTeam = arena.randomJoin(p);
+            p.sendMessage(new TextComponent("Вы присоеденились к " + randomTeam)); // todo: remove debug
         }
 
         for (Team t : teams) {

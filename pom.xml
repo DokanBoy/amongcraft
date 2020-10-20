@@ -18,9 +18,7 @@
         <bukkit.version>1.12.2-R0.1-SNAPSHOT</bukkit.version>
         <helper.version>5.6.6</helper.version>
         <hicari.version>3.4.5</hicari.version>
-        <slimeworldmanager.version>2.2.1</slimeworldmanager.version>
 
-        <jetbrains-annotations.version>20.1.0</jetbrains-annotations.version>
         <guava.version>29.0-jre</guava.version>
         <lombok.version>1.18.16</lombok.version>
     </properties>
@@ -65,10 +63,6 @@
 
     <repositories>
         <repository>
-            <id>glaremasters</id>
-            <url>https://repo.glaremasters.me/repository/concuncan/</url>
-        </repository>
-        <repository>
             <id>papermc-repo</id>
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
@@ -84,28 +78,32 @@
             <artifactId>paper-api</artifactId>
             <version>${bukkit.version}</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.guava</groupId>
+                    <artifactId>guava</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>me.lucko</groupId>
             <artifactId>helper</artifactId>
             <version>${helper.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>${hicari.version}</version>
+            <scope>compile</scope>
         </dependency>
-<!--        <dependency> TODO
-            <groupId>com.grinderwolf</groupId>
-            <artifactId>slimeworldmanager-api</artifactId>
-            <version>${slimeworldmanager.version}</version>
-        </dependency> -->
 
         <!-- Utils -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

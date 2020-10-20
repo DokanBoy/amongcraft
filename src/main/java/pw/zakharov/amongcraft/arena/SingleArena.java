@@ -54,7 +54,6 @@ public class SingleArena implements Arena {
         this.state = DISABLED;
 
         Log.info("Created arena: " + toString());
-        enable();
     }
 
     private void setupWorld() {
@@ -69,7 +68,10 @@ public class SingleArena implements Arena {
 
     @Override
     public void enable() {
-        if (state == ENABLED) return;
+        if (state != DISABLED) {
+            Log.warn("To enable the arena, it must have state = DISABLED. Current state = " + state);
+            return;
+        }
 
         setupWorld();
         setStatus(ENABLED);
@@ -77,8 +79,15 @@ public class SingleArena implements Arena {
 
     @Override
     public void disable() {
-        if (state == DISABLED) return;
-        if (state == STARTED) stop(UNKNOWN);
+        if (state == DISABLED) {
+            Log.warn("Arena already disabled!");
+            return;
+        }
+
+        if (state == STARTED) {
+            Log.info("Stopping arena because called disable() method in API.");
+            stop(UNKNOWN);
+        }
 
         setStatus(DISABLED);
         Players.all().forEach(player -> player.kickPlayer("Arena disabled"));
@@ -87,8 +96,8 @@ public class SingleArena implements Arena {
 
     @Override
     public void start() {
-        if (state == STARTED || state == DISABLED) {
-            Log.warn("You can`t start arena when it has not state ENABLED!");
+        if (!(state == STARTING || state == ENABLED)) {
+            Log.warn("You can`t start arena when it has not state ENABLED or STARTING. Current state = " + state);
             return;
         }
 
@@ -99,7 +108,7 @@ public class SingleArena implements Arena {
     @Override
     public void start(int afterSec) {
         if (state != ENABLED) {
-            Log.warn("You can`t start arena when it has not state ENABLED!");
+            Log.warn("You can`t start arena when it has not state ENABLED. Current state = " + state);
             return;
         }
 
@@ -137,25 +146,30 @@ public class SingleArena implements Arena {
         Events.callSync(new ArenaScheduledStopEvent(this, cause, afterSec));
     }
 
+    // todo: выглядит как говно. переделать. как?
     @Override
-    public void randomJoin(@NonNull Player player) {
+    public @NonNull Team randomJoin(@NonNull Player player) {
         final @NonNull Team imposterTeam = TeamService.getTeam(this, Team.Role.IMPOSTER);
         final @NonNull Team innocentTeam = TeamService.getTeam(this, Team.Role.IMPOSTER);
         final @NonNull Team spectatorTeam = TeamService.getTeam(this, Team.Role.SPECTATOR);
 
-        if (imposterTeam.getSize() < imposterTeam.getMaxSize()
-                && innocentTeam.getSize() < innocentTeam.getMaxSize()) {
+        if (imposterTeam.getSize() < imposterTeam.getMaxSize() && innocentTeam.getSize() < innocentTeam.getMaxSize()) {
             Log.info("В обоих командах есть место, выбираем рандомную");
-            join(player, RandomSelector.uniform(ImmutableSet.of(imposterTeam, innocentTeam)).pick());
+            Team randomTeam = RandomSelector.uniform(ImmutableSet.of(imposterTeam, innocentTeam)).pick();
+            join(player, randomTeam);
+            return randomTeam;
         } else if (imposterTeam.getSize() >= imposterTeam.getMaxSize()) {
             Log.info("В команде импостеров закончилось место, пикаем innocentTeam");
             join(player, innocentTeam);
+            return innocentTeam;
         } else if (innocentTeam.getSize() >= innocentTeam.getMaxSize()) {
             Log.info("В команде мирных закончилось место, пикаем imposterTeam");
             join(player, imposterTeam);
+            return imposterTeam;
         } else {
             Log.info("В командах закончилось место, пикаем spectatorTeam");
             join(player, spectatorTeam);
+            return spectatorTeam;
         }
     }
 

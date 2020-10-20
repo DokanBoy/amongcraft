@@ -25,7 +25,7 @@ public interface Arena {
 
     void stop(@NonNull StopCause cause, int afterSec);
 
-    void randomJoin(@NonNull Player player);
+    @NonNull Team randomJoin(@NonNull Player player);
 
     void join(@NonNull Player player, @NonNull Team team);
 

@@ -26,17 +26,20 @@ public interface Team {
     int getMaxSize();
 
     /**
-     * Запихиваем игрока в команду, если в ней есть место или у игрока хватает прав на форсированное вступление
+     * @param player игрок, которого хотим запихнуть в команду
+     * @return можем ли запихнуть
+     */
+    default boolean canJoin(@NonNull Player player) {
+        return getMaxSize() > getSize() || player.hasPermission("among.admin");
+    }
+
+    /**
+     * Запихиваем игрока в команду
      *
      * @param player игрок, которого хотим запихнуть в команду
-     * @return можем ли добавить игрока в команду
      */
-    default boolean join(@NonNull Player player) {
-        if (getMaxSize() > getSize() || player.hasPermission("among.admin")) {
-            getPlayers().add(player);
-            return true;
-        }
-        return false;
+    default void join(@NonNull Player player) {
+        getPlayers().add(player);
     }
 
     /**

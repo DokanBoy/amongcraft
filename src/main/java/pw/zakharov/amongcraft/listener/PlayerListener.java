@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
+import pw.zakharov.amongcraft.api.Team;
 import pw.zakharov.amongcraft.service.ArenaService;
 import pw.zakharov.amongcraft.service.TeamService;
 import pw.zakharov.amongcraft.util.ArmorStandUtils;
@@ -37,30 +38,32 @@ public class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
+    public void onJoin(@NonNull PlayerJoinEvent event) {
+        final @NonNull Player player = event.getPlayer();
 
-        event.setJoinMessage("§aИгрок " + player.getName() + " §cвошел на арену!");
+        event.setJoinMessage("§aИгрок §f" + player.getName() + " §aвошел на арену!");
     }
 
     @EventHandler
-    public void onQuit(PlayerQuitEvent event) {
-        Player player = event.getPlayer();
-        teamService.getPlayerTeam(player).ifPresent(team -> {
-            team.leave(player);
-        });
-        event.setQuitMessage("§cИгрок " + player.getName() + " §cвышел!");
+    public void onQuit(@NonNull PlayerQuitEvent event) {
+        final @NonNull Player player = event.getPlayer();
+        final @NonNull Team playerTeam = teamService.getPlayerTeam(player).orElseThrow(NullPointerException::new);
+
+        playerTeam.leave(player);
+        event.setQuitMessage("§cИгрок §f" + player.getName() + " §cвышел! Он был " + playerTeam.getContext().getName());
     }
 
     @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
+    public void onInteractWithKnife(@NonNull PlayerInteractEvent event) {
         if (!event.getAction().name().contains("RIGHT_CLICK")) return;
+        if (event.getItem().getType() != Material.IRON_SWORD) return;
 
-        Player player = event.getPlayer();
-        teamService.getPlayerTeam(player).ifPresent(team -> {
-            if (team.getContext().getRole() == IMPOSTER && event.getItem().getType() == Material.IRON_SWORD)
-                ArmorStandUtils.throwSword(player, 5);
-        });
+        final @NonNull Player player = event.getPlayer();
+        final @NonNull Team playerTeam = teamService.getPlayerTeam(player).orElseThrow(NullPointerException::new);
+
+        if (playerTeam.getContext().getRole() == IMPOSTER) {
+            ArmorStandUtils.throwSword(player, 5);
+        }
     }
 
 }

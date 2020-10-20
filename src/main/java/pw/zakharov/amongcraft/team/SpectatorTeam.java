@@ -18,9 +18,8 @@ public class SpectatorTeam extends AbstractTeam {
     }
 
     @Override
-    public boolean join(@NonNull Player player) {
+    public void join(@NonNull Player player) {
         getPlayers().add(player);
-        return true;
     }
 
     private static class SpectatorTeamContext extends AbstractTeamContext {

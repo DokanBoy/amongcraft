@@ -7,6 +7,9 @@ import me.lucko.helper.Commands;
 import me.lucko.helper.plugin.ExtendedJavaPlugin;
 import pw.zakharov.amongcraft.api.Arena;
 import pw.zakharov.amongcraft.arena.loader.ArenaLoader;
+import pw.zakharov.amongcraft.listener.ArenaListener;
+import pw.zakharov.amongcraft.listener.PlayerListener;
+import pw.zakharov.amongcraft.listener.TeamListener;
 import pw.zakharov.amongcraft.service.ArenaService;
 import pw.zakharov.amongcraft.service.ScoreboardService;
 import pw.zakharov.amongcraft.service.TaskService;
@@ -15,7 +18,6 @@ import pw.zakharov.amongcraft.service.impl.ArenaServiceImpl;
 import pw.zakharov.amongcraft.service.impl.ScoreboardServiceImpl;
 import pw.zakharov.amongcraft.service.impl.TaskServiceImpl;
 import pw.zakharov.amongcraft.service.impl.TeamServiceImpl;
-
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public final class AmongCraft extends ExtendedJavaPlugin {
@@ -37,6 +39,10 @@ public final class AmongCraft extends ExtendedJavaPlugin {
         arenaService = new ArenaServiceImpl(this);
         scoreboardService = new ScoreboardServiceImpl(this);
 
+        registerListener(new TeamListener(this));
+        registerListener(new ArenaListener(this, teamService));
+        registerListener(new PlayerListener(this, arenaService, teamService));
+
         /* TEST USAGE */
         ArenaLoader arenaLoader = ArenaLoader.createLoader(ArenaLoader.DEFAULT_ARENA_PATH, "Shuttle");
         Arena shuttleArena = arenaLoader.getArena();
@@ -44,10 +50,7 @@ public final class AmongCraft extends ExtendedJavaPlugin {
 
         Commands.create()
                 .assertPlayer()
-                .handler(context -> {
-                    shuttleArena.enable();
-                    shuttleArena.start(5);
-                })
+                .handler(context -> shuttleArena.start(5))
                 .register("astart");
 
         Commands.create()
