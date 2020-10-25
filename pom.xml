@@ -19,7 +19,7 @@
         <helper.version>5.6.6</helper.version>
         <hicari.version>3.4.5</hicari.version>
 
-        <guava.version>29.0-jre</guava.version>
+        <guava.version>30.0-jre</guava.version>
         <lombok.version>1.18.16</lombok.version>
     </properties>
     <url>zakharov.pw</url>
@@ -63,8 +63,8 @@
 
     <repositories>
         <repository>
-            <id>papermc-repo</id>
-            <url>https://papermc.io/repo/repository/maven-public/</url>
+            <id>lucko-repo</id>
+            <url>https://repo.lucko.me/</url>
         </repository>
         <repository>
             <id>sonatype</id>
@@ -80,8 +80,8 @@
             <scope>provided</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava</artifactId>
+                    <groupId>com.google.inject</groupId>
+                    <artifactId>guice</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -112,4 +112,5 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
 </project>
