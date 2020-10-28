@@ -25,9 +25,13 @@ public interface Arena {
 
     void stop(@NonNull StopCause cause, int afterSec);
 
-    @NonNull Team randomJoin(@NonNull Player player);
+    @NonNull Team selectRandomTeam(@NonNull Player player);
 
-    void join(@NonNull Player player, @NonNull Team team);
+    void selectTeam(@NonNull Player player, @NonNull Team team);
+
+    default void join(@NonNull Player player) {
+        getContext().getPlayers().add(player);
+    }
 
     @NonNull ArenaContext getContext();
 

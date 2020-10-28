@@ -6,24 +6,23 @@ import lombok.experimental.FieldDefaults;
 import lombok.val;
 import me.lucko.helper.utils.Log;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import pw.zakharov.amongcraft.api.Team;
 import pw.zakharov.amongcraft.service.TeamService;
 
+import javax.inject.Singleton;
 import java.util.*;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
  * Date: 06.10.2020 22:02
  */
+@Singleton
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TeamServiceImpl implements TeamService {
 
-    @NonNull Plugin plugin;
     @NonNull Map<String, Set<Team>> teamArenaMap;
 
-    public TeamServiceImpl(@NonNull Plugin plugin) {
-        this.plugin = plugin;
+    public TeamServiceImpl() {
         this.teamArenaMap = new LinkedHashMap<>();
     }
 

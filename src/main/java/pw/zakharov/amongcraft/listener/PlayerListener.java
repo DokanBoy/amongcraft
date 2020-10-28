@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import lombok.val;
+import me.lucko.helper.utils.Log;
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -58,11 +59,16 @@ public class PlayerListener implements Listener {
         if (event.getItem().getType() != Material.IRON_SWORD) return;
 
         val player = event.getPlayer();
-        val playerTeam = teamService.getPlayerTeam(player).orElseThrow(NullPointerException::new);
+        val optPlayerTeam = teamService.getPlayerTeam(player);
 
-        if (playerTeam.getContext().getRole() == IMPOSTER) {
-            ArmorStandUtils.throwSword(player, 5);
+        if (optPlayerTeam.isPresent()) {
+            if (optPlayerTeam.get().getContext().getRole() == IMPOSTER) {
+                ArmorStandUtils.throwSword(player, 5);
+            }
+        } else {
+            Log.warn("Player team is null");
         }
+
     }
 
 }

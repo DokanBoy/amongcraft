@@ -1,32 +1,27 @@
 package pw.zakharov.amongcraft;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import lombok.val;
 import me.lucko.helper.Commands;
+import me.lucko.helper.Events;
 import me.lucko.helper.plugin.ExtendedJavaPlugin;
+import org.bukkit.event.player.PlayerJoinEvent;
 import pw.zakharov.amongcraft.api.Arena;
 import pw.zakharov.amongcraft.arena.loader.ArenaLoader;
+import pw.zakharov.amongcraft.inject.AmongModule;
 import pw.zakharov.amongcraft.listener.ArenaListener;
 import pw.zakharov.amongcraft.listener.PlayerListener;
 import pw.zakharov.amongcraft.listener.TeamListener;
 import pw.zakharov.amongcraft.service.ArenaService;
-import pw.zakharov.amongcraft.service.ScoreboardService;
-import pw.zakharov.amongcraft.service.TaskService;
 import pw.zakharov.amongcraft.service.TeamService;
-import pw.zakharov.amongcraft.service.impl.ArenaServiceImpl;
-import pw.zakharov.amongcraft.service.impl.ScoreboardServiceImpl;
-import pw.zakharov.amongcraft.service.impl.TaskServiceImpl;
-import pw.zakharov.amongcraft.service.impl.TeamServiceImpl;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public final class AmongCraft extends ExtendedJavaPlugin {
 
-    static @Getter TeamService teamService;
-    static @Getter TaskService taskService;
-    static @Getter ArenaService arenaService;
-    static @Getter ScoreboardService scoreboardService;
+    Injector injector;
 
     @Override
     protected void enable() {
@@ -35,10 +30,9 @@ public final class AmongCraft extends ExtendedJavaPlugin {
         saveResource("scoreboards.conf", false);
         saveResource("messages.conf", false);
 
-        teamService = new TeamServiceImpl(this);
-        taskService = new TaskServiceImpl(this);
-        arenaService = new ArenaServiceImpl(this);
-        scoreboardService = new ScoreboardServiceImpl(this);
+        injector = Guice.createInjector(new AmongModule());
+        ArenaService arenaService = injector.getInstance(ArenaService.class);
+        TeamService teamService = injector.getInstance(TeamService.class);
 
         registerListener(new TeamListener(this));
         registerListener(new ArenaListener(this, teamService));
@@ -48,6 +42,9 @@ public final class AmongCraft extends ExtendedJavaPlugin {
         val arenaLoader = ArenaLoader.createLoader(ArenaLoader.DEFAULT_ARENA_PATH, "Shuttle");
         val shuttleArena = arenaLoader.getArena();
         arenaService.register(shuttleArena);
+
+        Events.subscribe(PlayerJoinEvent.class)
+              .handler(event -> shuttleArena.join(event.getPlayer()));
 
         Commands.create()
                 .assertPlayer()
@@ -65,6 +62,7 @@ public final class AmongCraft extends ExtendedJavaPlugin {
 
     @Override
     protected void disable() {
+        ArenaService arenaService = injector.getInstance(ArenaService.class);
         arenaService.getArenas()
                     .forEach(arena -> {
                         arena.stop(Arena.StopCause.UNKNOWN);

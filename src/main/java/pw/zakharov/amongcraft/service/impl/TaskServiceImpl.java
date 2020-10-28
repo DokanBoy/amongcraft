@@ -4,10 +4,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
-import org.bukkit.plugin.Plugin;
 import pw.zakharov.amongcraft.api.Task;
 import pw.zakharov.amongcraft.service.TaskService;
 
+import javax.inject.Singleton;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -16,15 +16,13 @@ import java.util.Set;
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
  * Date: 14.10.2020 17:47
  */
-@FieldDefaults(level = AccessLevel.PRIVATE,
-               makeFinal = true)
+@Singleton
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class TaskServiceImpl implements TaskService {
 
-    @NonNull Plugin plugin;
     @Getter @NonNull Set<Task> tasks;
 
-    public TaskServiceImpl(@NonNull Plugin plugin) {
-        this.plugin = plugin;
+    public TaskServiceImpl() {
         this.tasks = new LinkedHashSet<>();
     }
 

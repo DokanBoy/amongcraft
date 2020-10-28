@@ -5,23 +5,22 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import me.lucko.helper.scoreboard.Scoreboard;
 import me.lucko.helper.utils.Log;
-import org.bukkit.plugin.Plugin;
 import pw.zakharov.amongcraft.service.ScoreboardService;
 
+import javax.inject.Singleton;
 import java.util.*;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
  * Date: 04.10.2020 21:29
  */
+@Singleton
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ScoreboardServiceImpl implements ScoreboardService {
 
-    @NonNull Plugin plugin;
     @NonNull Map<String, Scoreboard> scoreboards;
 
-    public ScoreboardServiceImpl(@NonNull Plugin plugin) {
-        this.plugin = plugin;
+    public ScoreboardServiceImpl() {
         this.scoreboards = new HashMap<>();
     }
 

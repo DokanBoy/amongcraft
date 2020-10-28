@@ -13,12 +13,13 @@ import me.lucko.helper.serialize.Point;
 import me.lucko.helper.utils.Log;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
-import pw.zakharov.amongcraft.AmongCraft;
 import pw.zakharov.amongcraft.api.Arena;
 import pw.zakharov.amongcraft.arena.SingleArena;
 import pw.zakharov.amongcraft.data.ArenaData;
+import pw.zakharov.amongcraft.service.TeamService;
 import pw.zakharov.amongcraft.util.CollectionUtils;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
@@ -39,6 +40,8 @@ import static pw.zakharov.amongcraft.api.Team.Role.*;
     @NonNull @NonFinal Arena arena;
     @NonNull @NonFinal CommentedConfigurationNode arenaDataNode;
 
+    @NonFinal TeamService teamService;
+
     public ArenaLoaderImpl(@NonNull Path dir, @NonNull String name) {
         this.hoconLoader = ConfigFactory.hocon().loader(dir.resolve(name.toLowerCase() + ".conf"));
         this.arenaDataNode = hoconLoader.createEmptyNode();
@@ -52,11 +55,15 @@ import static pw.zakharov.amongcraft.api.Team.Role.*;
         return arena;
     }
 
+    @Inject
+    public void setTeamService(@NonNull TeamService teamService) {
+        this.teamService = teamService;
+    }
+
     @Override
     public @NonNull void saveArena(@NonNull Arena arena) {
         this.arena = arena;
 
-        val teamService = AmongCraft.getTeamService();
         val arenaContext = arena.getContext();
         val spectatorTeam = teamService.getTeam(arenaContext.getName(), SPECTATOR)
                                        .orElseThrow(NullPointerException::new);

@@ -38,7 +38,7 @@ public class ArenaListener implements Listener {
         var teams = arena.getContext().getTeams();
 
         for (Player p: arena.getContext().getPlayers()) {
-            var randomTeam = arena.randomJoin(p);
+            var randomTeam = arena.selectRandomTeam(p);
             p.sendMessage(new TextComponent("Вы присоеденились к " + randomTeam)); // todo: remove debug
         }
 

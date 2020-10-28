@@ -6,10 +6,10 @@ import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import lombok.val;
 import me.lucko.helper.utils.Log;
-import org.bukkit.plugin.Plugin;
 import pw.zakharov.amongcraft.api.Arena;
 import pw.zakharov.amongcraft.service.ArenaService;
 
+import javax.inject.Singleton;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -18,14 +18,13 @@ import java.util.Set;
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
  * Date: 07.10.2020 23:51
  */
+@Singleton
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ArenaServiceImpl implements ArenaService {
 
-    @NonNull Plugin plugin;
     @Getter @NonNull Set<Arena> arenas;
 
-    public ArenaServiceImpl(@NonNull Plugin plugin) {
-        this.plugin = plugin;
+    public ArenaServiceImpl() {
         this.arenas = new LinkedHashSet<>();
     }
 

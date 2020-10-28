@@ -15,7 +15,6 @@ import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import pw.zakharov.amongcraft.AmongCraft;
 import pw.zakharov.amongcraft.api.Arena;
 import pw.zakharov.amongcraft.api.Team;
 import pw.zakharov.amongcraft.api.event.arena.ArenaScheduledStopEvent;
@@ -26,6 +25,7 @@ import pw.zakharov.amongcraft.team.ImposterTeam;
 import pw.zakharov.amongcraft.team.InnocentTeam;
 import pw.zakharov.amongcraft.team.SpectatorTeam;
 
+import javax.inject.Inject;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -147,29 +147,29 @@ public class SingleArena implements Arena {
 
     // todo: выглядит как говно. переделать. как?
     @Override
-    public @NonNull Team randomJoin(@NonNull Player player) {
+    public @NonNull Team selectRandomTeam(@NonNull Player player) {
         val imposterTeam = TeamService.getTeam(this, Team.Role.IMPOSTER);
         val innocentTeam = TeamService.getTeam(this, Team.Role.IMPOSTER);
         val spectatorTeam = TeamService.getTeam(this, Team.Role.SPECTATOR);
 
         if (imposterTeam.getSize() < imposterTeam.getMaxSize() && innocentTeam.getSize() < innocentTeam.getMaxSize()) {
             val randomTeam = RandomSelector.uniform(ImmutableSet.of(imposterTeam, innocentTeam)).pick();
-            join(player, randomTeam);
+            selectTeam(player, randomTeam);
             return randomTeam;
         } else if (imposterTeam.getSize() >= imposterTeam.getMaxSize()) {
-            join(player, innocentTeam);
+            selectTeam(player, innocentTeam);
             return innocentTeam;
         } else if (innocentTeam.getSize() >= innocentTeam.getMaxSize()) {
-            join(player, imposterTeam);
+            selectTeam(player, imposterTeam);
             return imposterTeam;
         } else {
-            join(player, spectatorTeam);
+            selectTeam(player, spectatorTeam);
             return spectatorTeam;
         }
     }
 
     @Override
-    public void join(@NonNull Player player, @NonNull Team team) {
+    public void selectTeam(@NonNull Player player, @NonNull Team team) {
         if (state == DISABLED) {
             Log.warn("Arena " + context.getName() + " is disabled. Enable before join!" + "");
             return;
@@ -199,20 +199,37 @@ public class SingleArena implements Arena {
         @Getter @NonNull Location lobby;
         @Getter @NonNull Set<Team> teams;
 
+        @NonFinal @Inject TeamService teamService;
+
+        // todo: все игроки должны спавниться вокруг стола. не нужны разные локации
         public SingleArenaContext(@NonNull String name,
                                   @NonNull Location lobby, @NonNull Location spectatorSpawn,
                                   @NonNull Set<Location> innocentSpawns, int innocents,
                                   @NonNull Set<Location> imposterSpawns, int imposters) {
-            val teamService = AmongCraft.getTeamService();
-            teamService.register(name, new InnocentTeam(innocentSpawns, innocents));
-            teamService.register(name, new ImposterTeam(imposterSpawns, imposters));
-            teamService.register(name, new SpectatorTeam(spectatorSpawn));
-
-
             this.name = name;
             this.lobby = lobby;
-            this.teams = teamService.getArenaTeams(name);
+            this.teams = new LinkedHashSet<>(3);
+
+            registerTeams(new ImposterTeam(imposterSpawns, imposters),
+                    new InnocentTeam(innocentSpawns, innocents),
+                    new SpectatorTeam(spectatorSpawn));
         }
+
+        private void registerTeams(@NonNull Team... teams) {
+            if (teamService == null) {
+                Log.warn("Team service is null");
+            }
+
+            for (Team team : teams) {
+                teamService.register(name, team);
+            }
+            this.teams.addAll(teamService.getArenaTeams(name));
+        }
+
+/*        @Inject
+        public void setTeamService(@NonNull TeamService teamService) {
+            this.teamService = teamService;
+        }*/
 
         @Override
         public @NonNull Set<Player> getPlayers() {
