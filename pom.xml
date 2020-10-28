@@ -50,6 +50,12 @@
                         </goals>
                         <configuration>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>me.lucko.*</exclude>
+                                    <exclude>LICENSE*</exclude> <!-- FOR TEST -->
+                                </excludes>
+                            </artifactSet>
                         </configuration>
                     </execution>
                 </executions>
@@ -89,13 +95,13 @@
             <groupId>me.lucko</groupId>
             <artifactId>helper</artifactId>
             <version>${helper.version}</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>me.lucko</groupId>
             <artifactId>helper-sql</artifactId>
             <version>${helper-sql.version}</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Utils -->
