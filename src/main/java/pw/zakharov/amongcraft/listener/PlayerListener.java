@@ -4,8 +4,11 @@ import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
 import lombok.val;
-import me.lucko.helper.utils.Log;
+import me.lucko.helper.cooldown.Cooldown;
+import me.lucko.helper.cooldown.CooldownMap;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -15,6 +18,8 @@ import org.bukkit.plugin.Plugin;
 import pw.zakharov.amongcraft.service.ArenaService;
 import pw.zakharov.amongcraft.service.TeamService;
 import pw.zakharov.amongcraft.util.ArmorStandUtils;
+
+import java.util.concurrent.TimeUnit;
 
 import static pw.zakharov.amongcraft.api.Team.Role.IMPOSTER;
 
@@ -59,16 +64,16 @@ public class PlayerListener implements Listener {
         if (event.getItem().getType() != Material.IRON_SWORD) return;
 
         val player = event.getPlayer();
-        val optPlayerTeam = teamService.getPlayerTeam(player);
+        val playerTeam = teamService.getPlayerTeam(player).orElseThrow(NullPointerException::new);
 
-        if (optPlayerTeam.isPresent()) {
-            if (optPlayerTeam.get().getContext().getRole() == IMPOSTER) {
-                ArmorStandUtils.throwSword(player, 5);
-            }
+        if (playerTeam.getContext().getRole() != IMPOSTER) return;
+
+        CooldownMap<Player> cooldownMap = CooldownMap.create(Cooldown.of(5, TimeUnit.SECONDS));
+        if (cooldownMap.test(player)) {
+            ArmorStandUtils.throwSword(player, 5);
         } else {
-            Log.warn("Player team is null");
+            player.sendMessage(new TextComponent("Перезарядка, осталось " + cooldownMap.elapsed(player)));
         }
-
     }
 
 }

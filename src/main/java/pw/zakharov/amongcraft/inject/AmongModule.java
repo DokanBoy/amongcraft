@@ -7,6 +7,7 @@ import pw.zakharov.amongcraft.arena.loader.ArenaLoader;
 import pw.zakharov.amongcraft.arena.loader.ArenaLoaderImpl;
 import pw.zakharov.amongcraft.inject.annotations.ArenasPath;
 import pw.zakharov.amongcraft.inject.annotations.DataPath;
+import pw.zakharov.amongcraft.inject.annotations.Plugin;
 import pw.zakharov.amongcraft.service.ArenaService;
 import pw.zakharov.amongcraft.service.ScoreboardService;
 import pw.zakharov.amongcraft.service.TaskService;
@@ -32,6 +33,12 @@ public class AmongModule extends AbstractModule {
         bind(ScoreboardService.class).to(ScoreboardServiceImpl.class);
 
         bind(ArenaLoader.class).to(ArenaLoaderImpl.class);
+    }
+
+    @Provides
+    @Plugin
+    private static org.bukkit.plugin.Plugin providePlugin() {
+        return Helper.hostPlugin();
     }
 
     @Provides

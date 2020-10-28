@@ -29,9 +29,7 @@ public interface Arena {
 
     void selectTeam(@NonNull Player player, @NonNull Team team);
 
-    default void join(@NonNull Player player) {
-        getContext().getPlayers().add(player);
-    }
+    void join(@NonNull Player player);
 
     @NonNull ArenaContext getContext();
 

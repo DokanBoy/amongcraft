@@ -184,6 +184,11 @@ public class SingleArena implements Arena {
         Log.info("Player " + player.getName() + " joined to " + team.getContext().getName());
     }
 
+    @Override
+    public void join(@NonNull Player player) {
+        context.getPlayers().add(player);
+    }
+
     private void setStatus(@NonNull State state) {
         this.state = state;
     }
@@ -196,6 +201,7 @@ public class SingleArena implements Arena {
         @Getter @NonNull String name;
         @Getter @NonNull Location lobby;
         @Getter @NonNull Set<Team> teams;
+        @Getter @NonNull Set<Player> players;
 
         @NonNull TeamService teamService;
 
@@ -209,6 +215,7 @@ public class SingleArena implements Arena {
             this.name = name;
             this.lobby = lobby;
             this.teams = new LinkedHashSet<>(3);
+            this.players = new LinkedHashSet<>(10);
 
             registerTeams(new ImposterTeam(imposterSpawns, imposters),
                     new InnocentTeam(innocentSpawns, innocents),
@@ -220,13 +227,6 @@ public class SingleArena implements Arena {
                 teamService.register(name, team);
             }
             this.teams.addAll(teamService.getArenaTeams(name));
-        }
-
-        @Override
-        public @NonNull Set<Player> getPlayers() {
-            Set<Player> players = new LinkedHashSet<>();
-            teams.forEach(team -> players.addAll(team.getPlayers()));
-            return players;
         }
 
     }

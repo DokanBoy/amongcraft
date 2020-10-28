@@ -48,7 +48,6 @@ public class TeamListener implements Listener {
 
         player.setDisplayName("");
         player.getInventory().clear();
-        player.getInventory().addItem(KNIFE_ITEM_STACK);
     }
 
     /**
@@ -62,8 +61,6 @@ public class TeamListener implements Listener {
         val arena = event.getArena();
         val player = event.getPlayer();
 
-        player.setDisplayName("");
-        player.getInventory().clear();
         player.getInventory().addItem(KNIFE_ITEM_STACK);
     }
 
@@ -78,9 +75,6 @@ public class TeamListener implements Listener {
         val arena = event.getArena();
         val player = event.getPlayer();
 
-        player.setDisplayName("");
-        player.getInventory().clear();
-        player.getInventory().addItem(KNIFE_ITEM_STACK);
     }
 
     /**

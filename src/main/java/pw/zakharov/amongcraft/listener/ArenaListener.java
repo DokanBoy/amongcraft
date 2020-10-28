@@ -32,14 +32,17 @@ public class ArenaListener implements Listener {
         this.teamService = teamService;
     }
 
+    // todo: remove debug
     @EventHandler
     public void onStart(@NonNull ArenaStartEvent event) {
         var arena = event.getArena();
         var teams = arena.getContext().getTeams();
 
-        for (Player p: arena.getContext().getPlayers()) {
+        Helper.server().broadcast(new TextComponent("Игроки на арене: " + arena.getContext().getPlayers()));
+        for (Player p : arena.getContext().getPlayers()) {
+            Helper.server().broadcast(new TextComponent("Обработка игрока " + p.getName()));
             var randomTeam = arena.selectRandomTeam(p);
-            p.sendMessage(new TextComponent("Вы присоеденились к " + randomTeam)); // todo: remove debug
+            p.sendMessage(new TextComponent("Вы присоеденились к " + randomTeam));
         }
 
         for (Team t : teams) {
