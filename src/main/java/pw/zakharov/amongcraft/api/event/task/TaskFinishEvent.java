@@ -1,4 +1,4 @@
-package pw.zakharov.amongcraft.api.event.team;
+package pw.zakharov.amongcraft.api.event.task;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -7,23 +7,23 @@ import lombok.experimental.FieldDefaults;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import pw.zakharov.amongcraft.api.Team;
+import pw.zakharov.amongcraft.api.Task;
 
 /**
  * Created by: Alexey Zakharov <alexey@zakharov.pw>
- * Date: 19.10.2020 22:09
+ * Date: 28.10.2020 19:48
  */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class TeamLeaveEvent extends Event {
+public class TaskFinishEvent extends Event {
 
     static HandlerList handlers = new HandlerList();
 
     @Getter @NonNull Player player;
-    @Getter @NonNull Team team;
+    @Getter @NonNull Task task;
 
-    public TeamLeaveEvent(@NonNull Player player, @NonNull Team team) {
+    public TaskFinishEvent(@NonNull Player player, @NonNull Task task) {
         this.player = player;
-        this.team = team;
+        this.task = task;
     }
 
     public static HandlerList getHandlerList() {

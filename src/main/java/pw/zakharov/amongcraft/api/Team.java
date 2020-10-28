@@ -1,9 +1,12 @@
 package pw.zakharov.amongcraft.api;
 
 import lombok.NonNull;
+import me.lucko.helper.Events;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import pw.zakharov.amongcraft.api.event.team.TeamJoinEvent;
+import pw.zakharov.amongcraft.api.event.team.TeamLeaveEvent;
 
 import java.util.Set;
 
@@ -40,6 +43,8 @@ public interface Team {
      */
     default void join(@NonNull Player player) {
         getPlayers().add(player);
+
+        Events.callSync(new TeamJoinEvent(player, this));
     }
 
     /**
@@ -47,6 +52,8 @@ public interface Team {
      */
     default void leave(@NonNull Player player) {
         getPlayers().remove(player);
+
+        Events.callSync(new TeamLeaveEvent(player, this));
     }
 
     /**

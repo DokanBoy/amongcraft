@@ -47,14 +47,12 @@ public final class AmongCraft extends ExtendedJavaPlugin {
               .handler(event -> shuttleArena.join(event.getPlayer()));
 
         Commands.create()
-                .assertPlayer()
                 .handler(context -> shuttleArena.start(5))
                 .register("astart");
 
         Commands.create()
-                .assertPlayer()
                 .handler(context -> {
-                    shuttleArena.stop(Arena.StopCause.UNKNOWN, 5);
+                    shuttleArena.stop(Arena.StopCause.UNKNOWN);
                     shuttleArena.disable();
                 })
                 .register("astop");

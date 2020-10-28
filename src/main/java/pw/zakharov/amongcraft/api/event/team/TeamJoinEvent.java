@@ -7,7 +7,6 @@ import lombok.experimental.FieldDefaults;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import pw.zakharov.amongcraft.api.Arena;
 import pw.zakharov.amongcraft.api.Team;
 
 /**
@@ -20,13 +19,11 @@ public class TeamJoinEvent extends Event {
     static HandlerList handlers = new HandlerList();
 
     @Getter @NonNull Player player;
-    @Getter @NonNull Arena arena;
     @Getter @NonNull Team team;
 
-    public TeamJoinEvent(@NonNull Player player, @NonNull Team team, @NonNull Arena arena) {
+    public TeamJoinEvent(@NonNull Player player, @NonNull Team team) {
         this.player = player;
         this.team = team;
-        this.arena = arena;
     }
 
     public static HandlerList getHandlerList() {
