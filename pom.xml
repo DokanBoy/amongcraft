@@ -65,6 +65,10 @@
 
     <repositories>
         <repository>
+            <id>papermc</id>
+            <url>https://papermc.io/repo/repository/maven-public/</url>
+        </repository>
+        <repository>
             <id>lucko-repo</id>
             <url>https://repo.lucko.me/</url>
         </repository>

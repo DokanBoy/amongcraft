@@ -33,6 +33,7 @@ public class PlayerListener implements Listener {
     @NonNull Plugin plugin;
     @NonNull ArenaService arenaService;
     @NonNull TeamService teamService;
+    @NonNull CooldownMap<Player> cooldownMap;
 
     public PlayerListener(@NonNull Plugin plugin,
                           @NonNull ArenaService arenaService,
@@ -40,6 +41,7 @@ public class PlayerListener implements Listener {
         this.plugin = plugin;
         this.arenaService = arenaService;
         this.teamService = teamService;
+        this.cooldownMap = CooldownMap.create(Cooldown.of(5, TimeUnit.SECONDS));
     }
 
     @EventHandler
@@ -68,11 +70,11 @@ public class PlayerListener implements Listener {
 
         if (playerTeam.getContext().getRole() != IMPOSTER) return;
 
-        CooldownMap<Player> cooldownMap = CooldownMap.create(Cooldown.of(5, TimeUnit.SECONDS));
         if (cooldownMap.test(player)) {
             ArmorStandUtils.throwSword(player, 5);
         } else {
-            player.sendMessage(new TextComponent("Перезарядка, осталось " + cooldownMap.elapsed(player)));
+            player.sendMessage(new TextComponent("Перезарядка, осталось " +
+                    cooldownMap.remainingTime(player, TimeUnit.SECONDS) + " сек"));
         }
     }
 
