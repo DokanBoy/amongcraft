@@ -1,5 +1,5 @@
 name: AmongCraft
 version: ${project.version}
 main: pw.zakharov.amongcraft.AmongCraft
-depend: [ ProtocolLib ]
+depend: [ ]
 website: zakharov.pw

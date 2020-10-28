@@ -1,5 +1,6 @@
 package pw.zakharov.amongcraft.service.impl;
 
+import com.google.inject.Singleton;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
@@ -9,7 +10,6 @@ import me.lucko.helper.utils.Log;
 import pw.zakharov.amongcraft.api.Arena;
 import pw.zakharov.amongcraft.service.ArenaService;
 
-import javax.inject.Singleton;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;

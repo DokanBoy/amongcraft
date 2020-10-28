@@ -39,8 +39,9 @@ public final class AmongCraft extends ExtendedJavaPlugin {
         registerListener(new PlayerListener(this, arenaService, teamService));
 
         /* TEST USAGE */
-        val arenaLoader = ArenaLoader.createLoader(ArenaLoader.DEFAULT_ARENA_PATH, "Shuttle");
-        val shuttleArena = arenaLoader.getArena();
+
+        val arenaLoader = injector.getInstance(ArenaLoader.class);
+        val shuttleArena = arenaLoader.loadArena("Shuttle");
         arenaService.register(shuttleArena);
 
         Events.subscribe(PlayerJoinEvent.class)

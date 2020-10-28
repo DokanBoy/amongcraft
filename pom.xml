@@ -21,6 +21,8 @@
 
         <guava.version>30.0-jre</guava.version>
         <lombok.version>1.18.16</lombok.version>
+
+        <guice.version>4.2.3</guice.version>
     </properties>
     <url>zakharov.pw</url>
 
@@ -110,7 +112,7 @@
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
-            <version>4.2.3</version>
+            <version>${guice.version}</version>
         </dependency>
     </dependencies>
 

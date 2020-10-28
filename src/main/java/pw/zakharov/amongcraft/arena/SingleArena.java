@@ -25,7 +25,6 @@ import pw.zakharov.amongcraft.team.ImposterTeam;
 import pw.zakharov.amongcraft.team.InnocentTeam;
 import pw.zakharov.amongcraft.team.SpectatorTeam;
 
-import javax.inject.Inject;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -145,7 +144,6 @@ public class SingleArena implements Arena {
         Events.callSync(new ArenaScheduledStopEvent(this, cause, afterSec));
     }
 
-    // todo: выглядит как говно. переделать. как?
     @Override
     public @NonNull Team selectRandomTeam(@NonNull Player player) {
         val imposterTeam = TeamService.getTeam(this, Team.Role.IMPOSTER);
@@ -175,9 +173,9 @@ public class SingleArena implements Arena {
             return;
         }
         val currentTeam = context.getTeams()
-                                            .stream()
-                                            .filter(t -> t.getPlayers().contains(player))
-                                            .findFirst();
+                                 .stream()
+                                 .filter(t -> t.getPlayers().contains(player))
+                                 .findFirst();
         if (currentTeam.isPresent()) {
             Log.info("Player already in " + currentTeam.get().getContext().getName());
             return;
@@ -199,13 +197,15 @@ public class SingleArena implements Arena {
         @Getter @NonNull Location lobby;
         @Getter @NonNull Set<Team> teams;
 
-        @NonFinal @Inject TeamService teamService;
+        @NonNull TeamService teamService;
 
         // todo: все игроки должны спавниться вокруг стола. не нужны разные локации
-        public SingleArenaContext(@NonNull String name,
+        public SingleArenaContext(@NonNull TeamService teamService,
+                                  @NonNull String name,
                                   @NonNull Location lobby, @NonNull Location spectatorSpawn,
                                   @NonNull Set<Location> innocentSpawns, int innocents,
                                   @NonNull Set<Location> imposterSpawns, int imposters) {
+            this.teamService = teamService;
             this.name = name;
             this.lobby = lobby;
             this.teams = new LinkedHashSet<>(3);
@@ -216,20 +216,11 @@ public class SingleArena implements Arena {
         }
 
         private void registerTeams(@NonNull Team... teams) {
-            if (teamService == null) {
-                Log.warn("Team service is null");
-            }
-
             for (Team team : teams) {
                 teamService.register(name, team);
             }
             this.teams.addAll(teamService.getArenaTeams(name));
         }
-
-/*        @Inject
-        public void setTeamService(@NonNull TeamService teamService) {
-            this.teamService = teamService;
-        }*/
 
         @Override
         public @NonNull Set<Player> getPlayers() {

@@ -1,5 +1,6 @@
 package pw.zakharov.amongcraft.service.impl;
 
+import com.google.inject.Singleton;
 import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.experimental.FieldDefaults;
@@ -9,7 +10,6 @@ import org.bukkit.entity.Player;
 import pw.zakharov.amongcraft.api.Team;
 import pw.zakharov.amongcraft.service.TeamService;
 
-import javax.inject.Singleton;
 import java.util.*;
 
 /**

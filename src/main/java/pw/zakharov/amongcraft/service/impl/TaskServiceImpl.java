@@ -1,5 +1,6 @@
 package pw.zakharov.amongcraft.service.impl;
 
+import com.google.inject.Singleton;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
@@ -7,7 +8,6 @@ import lombok.experimental.FieldDefaults;
 import pw.zakharov.amongcraft.api.Task;
 import pw.zakharov.amongcraft.service.TaskService;
 
-import javax.inject.Singleton;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
